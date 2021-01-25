@@ -6,7 +6,7 @@
 	\begin{enumerate}[labelindent=0em,leftmargin=1.5em]
 		\item Understand how to form the batch state estimation problem into a least square and how to solve the least square problem.
 		\item Understand the Gauss-Newton and Levenburg-Marquadt method and implement them.
-		\item Learn how to use the Google Ceres and g2o library to solve a least square problem.
+		\item Learn how to use the \textit{Google Ceres} and \textit{g2o} library to solve a least square problem.
 	\end{enumerate}
 \end{mdframed} 
 
@@ -14,7 +14,7 @@ In the previous lectures, we introduced the motion and observation equations of 
 
 However, due to the presence of noise, the equations of motion and observation can not be exactly met. Although the camera can fit the pinhole model very well, unfortunately, the data we get is usually affected by various unknown noises. Even if we have a high-precision camera and controller, the motion and observations equations can only be approximated. Therefore, instead of assuming that the data must conform to the equation, it is better to estimate the state from the noisy data accurately.
 
-Solving the state estimation problem requires a certain degree of optimization background knowledge. This section will introduce the basic unconstrained nonlinear optimization method and introduce optimization libraries g2o and Ceres.
+Solving the state estimation problem requires a certain degree of optimization background knowledge. This section will introduce the basic unconstrained nonlinear optimization method and introduce optimization libraries \textit{g2o} and \textit{Ceres}.
 
 \newpage
 \includepdf{resources/other/ch6.pdf}

@@ -35,20 +35,14 @@ This book is entitled as \textit{14 Lectures on Visual SLAM}. As the name sugges
 
 The book can be divided into two parts: The first part will be mainly focused on fundamental math knowledge, which contains:
 \begin{enumerate}
-	\item Lecture 1: preface (the one you are reading now), introducing the book's contents and structure.
-	\item Lecture 2: an overview of a SLAM system. It describes each module of a typical SLAM system and explains what to do and how to do it. The practice section introduces basic C++ programming in a Linux environment and the use of an IDE.
-	\item Lecture 3: rigid body motion in 3D space. You will learn about rotation matrices, quaternions, Euler angles and practice them with the Eigen library.
-	\item Lecture 4: Lie group and Lie algebra. It doesn't matter if you have never heard of them. You will learn the basics of the Lie group and manipulate them with Sophus.
-	\item Lecture 5: pinhole camera model and image expression in computer. You will use OpenCV to retrieve the camera's intrinsic and extrinsic parameters and generate a point cloud using the depth information through PCL (Point Cloud Library).
-	\item Lecture 6: nonlinear optimization, including state estimation, least squares, and gradient descent methods, e.g., Gauss-Newton and Levenburg-Marquardt method. You will solve a curve-fitting problem using the Ceres and g2o library.
 	
 	From lecture 7, we will be discussing SLAM algorithms, starting with visual odometry (VO) and followed by the map building problems: 
 	
-	\item Lecture 7: feature-based visual odometry, which is currently the mainstream in VO. Contents include feature extraction and matching, epipolar geometry calculation, Perspective-n-Point (PnP) algorithm, Iterative Closest Point (ICP) algorithm, and Bundle Adjustment (BA), etc. You will run these algorithms either by calling OpenCV functions or constructing your own optimization problem in Ceres and g2o.
+	\item Lecture 7: feature-based visual odometry, which is currently the mainstream in VO. Contents include feature extraction and matching, epipolar geometry calculation, Perspective-n-Point (PnP) algorithm, Iterative Closest Point (ICP) algorithm, and Bundle Adjustment (BA), etc. You will run these algorithms either by calling \textit{OpenCV} functions or constructing your own optimization problem in \textit{Ceres} and \textit{g2o}.
 	
 	\item Lecture 8: direct (or intensity-based) method for VO. You will learn the optical flow principle and the direct method. The practice part is about writing single-layer and multi-layer optical flow and direct method to implement a two-view VO.
 	
-	\item Lecture 9: backend optimization. We will discuss Bundle Adjustment in detail and show the relationship between its sparse structure and the corresponding graph model. You will use Ceres and g2o separately to solve the same BA problem.
+	\item Lecture 9: back-end optimization. We will discuss Bundle Adjustment in detail, and show the relationship between its sparse structure and the corresponding graph model. You will use \textit{Ceres} and \textit{g2o} separately to solve the same BA problem.
 	
 	\item Lecture 10: pose graph in the backend optimization. Pose graph is a more compact representation for BA, which converts all map points into constraints between keyframes. You will use g2o to optimize a pose graph.
 	
@@ -69,7 +63,7 @@ All source code in this book is hosted on Github:
 
 {\hfill\url{https://github.com/gaoxiang12/slambook2}\hfill}
 
-Note the slambook2 refers to the second version in which we added a lot of extra experiments.
+Note the \textit{slambook2} refers to the second version in which we added a lot of extra experiments.
 
 Check out the English version by:
 {\hfill git checkout -b en origin-en\hfill}

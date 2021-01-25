@@ -6,14 +6,14 @@
 	\begin{enumerate}[labelindent=0em,leftmargin=1.5em]
 		\item Understand the pin-hole camera model, intrinsics, extrinsics and distortion. 
 		\item Understand how to project a spatial point into image planes. 
-		\item Understand how to cope with the OpenCV images. 
+		\item Understand how to cope with the \textit{OpenCV} images.
 		\item Understand the basic calibration methods. 
 	\end{enumerate}
 \end{mdframed} 
 
 In the previous two lectures, we introduced the problem that how to express and optimize the robot's 6 DoF pose, and partially explained the meaning of the variables and the equations of motion and observation in SLAM. In this chapter we will discuss ``How robots observe the outside world'', which is part of the observation equation. In the camera-based visual SLAM, the observation mainly refers to the process of \textbf{image projection}.
 
-We can see a lot of photos in real life. In a computer, a photo consists of millions of pixels, each of which records the information about color or brightness. We will see a bundle of light reflected or emitted by an object in the three-dimensional world pass through the camera's optical center and is projected onto the imaging plane of the camera. After the camera's light sensor receives the light, it produces a measurement and we get the pixels, which form the photo we see. Can this process be described by mathematical equations? This lecture will first discuss the camera model, explain how the projection relationship is described, and what is the internal parameters in this projection process. At the same time, we are also going to give a brief introduction to the stereo and RGB-D cameras. Then, we introduce the basic operations of 2D images in OpenCV. Finally, an experiment of point cloud stitching is demonstrated to show the meaning of intrinsics and extrinsics parameters.
+We can see a lot of photos in real life. In a computer, a photo consists of millions of pixels, each of which records the information about color or brightness. We will see a bundle of light reflected or emitted by an object in the three-dimensional world pass through the camera's optical center and is projected onto the imaging plane of the camera. After the camera's light sensor receives the light, it produces a measurement and we get the pixels, which form the photo we see. Can this process be described by mathematical equations? This lecture will first discuss the camera model, explain how the projection relationship is described, and what is the internal parameters in this projection process. At the same time, we are also going to give a brief introduction to the stereo and RGB-D cameras. Then, we introduce the basic operations of 2D images in \textit{OpenCV}. Finally, an experiment of point cloud stitching is demonstrated to show the meaning of intrinsics and extrinsics parameters.
 
 \newpage
 \section{Pin-hole Camera Models}
@@ -236,7 +236,7 @@ The RGB-D camera can measure the distance of each pixel in real time. However, d
 \section{Images}
 Cameras and lens convert the information in the three-dimensional world into a photo composed of pixels, which is then stored in the computer as a data source for subsequent processing. In mathematics, images can be described by a matrix; in computers, they occupy a continuous disk or memory space, which can be represented by a two-dimensional array. In this way, the program does not have to distinguish whether they are dealing with a numerical matrix or a meaningful image.
 
-In this section, we will introduce some basic operations of computer image processing. In particular, we are going to introduce the basic steps of processing images with OpenCV, and lay the foundation for subsequent chapters. Let's start with the simplest case, the grayscale image. In a grayscale image, each pixel position $ (x, y) $ corresponds to a grayscale value of $ I $. Therefore, an image with a width of $ w $ and a height of $ h $ can be mathematically written as a function:
+In this section, we will introduce some basic operations of computer image processing. In particular, we are going to introduce the basic steps of processing images with \textit{OpenCV}, and lay the foundation for subsequent chapters. Let's start with the simplest case, the grayscale image. In a grayscale image, each pixel position $ (x, y) $ corresponds to a grayscale value of $ I $. Therefore, an image with a width of $ w $ and a height of $ h $ can be mathematically written as a function:
 \[
 (I) (x, y): \mathbb {R} ^ 2 \mapsto \mathbb {R},
 \]
@@ -266,35 +266,35 @@ The gray scale of a pixel can be recorded as an 8-bit unsigned integer, which is
 
 The representation of a color image requires the concept of a channel. In computers, we use a combination of three colors: red, green, and blue to express any color. Therefore, for each pixel, three values ​​of R, G, and B are recorded, and each value is called a channel. For example, the most common color image has three channels, each of which is represented by an 8-bit integer. Under this rule, one pixel occupies 24-bit space.
 
-The number and order of channels can be freely defined. In OpenCV color images, the default order of channels is B, G, R. That is, when we get a 24-bit pixel, the first 8 bits represent the blue value, the middle 8 bits represent the green value, and the last 8 bits represent the red value. In the same way, the order of R, G, and B can also be used to represent a color image. If you want to express the transparency of the image, use R, G, B, A four channels.
+The number and order of channels can be freely defined. In \textit{OpenCV} color images, the default order of channels is B, G, R. That is, when we get a 24-bit pixel, the first 8 bits represent the blue value, the middle 8 bits represent the green value, and the last 8 bits represent the red value. In the same way, the order of R, G, and B can also be used to represent a color image. If you want to express the transparency of the image, use R, G, B, A four channels.
 
 \section{Practice: Images in Computer Vision}
-\subsection{Basic Usage of OpenCV}
-The following is a demo program to understand how to access the image in OpenCV, and how to visit its pixels.
+\subsection{Basic Usage of \textit{OpenCV}}
+The following is a demo program to understand how to access the image in \textit{OpenCV}, and how to visit its pixels.
 
-\subsubsection{Install OpenCV}
-OpenCV \footnote {Official homepage: \url{http://opencv.org}. } provides a large number of open source image algorithms, and is a very widely used image processing algorithm library in computer vision. This book also uses OpenCV for basic image processing. Before using, readers must install it from library or from source code. Under Ubuntu, there are two options: \textbf{install from source code} or \textbf {only install binary library files}:
+\subsubsection{Install \textit{OpenCV}}
+\textit{OpenCV} \footnote {Official homepage: \url{http://opencv.org}. } provides a large number of open source image algorithms, and is a very widely used image processing algorithm library in computer vision. This book also uses \textit{OpenCV} for basic image processing. Before using, readers must install it from library or from source code. Under Ubuntu, there are two options: \textbf{install from source code} or \textbf {only install binary library files}:
 
 \begin{enumerate}
-\item Install from source means to download all OpenCV source code from the OpenCV website, compile and install on the machine for usage. The advantage is that you can freely choose which version to install, and the source code is accessible, but it takes some compilation time.
+\item Install from source means to download all \textit{OpenCV} source code from the \textit{OpenCV} website, compile and install on the machine for usage. The advantage is that you can freely choose which version to install, and the source code is accessible, but it takes some compilation time.
 \item Or, we can only installs the binary library file, which means it was pre-compiled by the Ubuntu community, so that there is no need to recompile it.
 \end{enumerate}
 
-Since we use a newer version of OpenCV, we must install it from the source code. First, you can adjust some compilation options to match the programming environment (for example, whether you need GPU acceleration, etc.); furthermore, from the source code installation we can use some additional functions. OpenCV currently maintains two major versions, divided into OpenCV 2.4 series and OpenCV 3 series \footnote{In 2020 we can also use version 4.0 or higher.}. This book uses the OpenCV \textbf {3} series.
+Since we use a newer version of \textit{OpenCV}, we must install it from the source code. First, you can adjust some compilation options to match the programming environment (for example, whether you need GPU acceleration, etc.); furthermore, from the source code installation we can use some additional functions. \textit{OpenCV} currently maintains two major versions, divided into \textit{OpenCV} 2.4 series and \textit{OpenCV} 3 series \footnote{In 2020 we can also use version 4.0 or higher.}. This book uses the \textit{OpenCV} \textbf {3} series.
 
-Because the OpenCV project is relatively large, it will not be placed under 3rdparty in this book. Readers can download it from ~ \url{http://opencv.org/downloads.html}~ and select the OpenCV for Linux version. You will get a compressed package like opencv-3.1.0.zip. Unzip it to any directory, we found that OpenCV is also a CMake project.
+Because the \textit{OpenCV} project is relatively large, it will not be placed under ``3rdparty'' in this book. Readers can download it from ~ \url{http://opencv.org/downloads.html}~ and select the \textit{OpenCV} for Linux version. You will get a compressed package like ``opencv-3.1.0.zip''. Unzip it to any directory, we found that \textit{OpenCV} is also a CMake project.
 
-Before compiling, first install the dependencies of OpenCV:
+Before compiling, first install the dependencies of \textit{OpenCV}:
 \begin{lstlisting}[language=sh, caption=Terminal input:]
 sudo apt-get install build-essential libgtk2.0-dev libvtk5-dev libjpeg-dev libtiff4-dev libjasper-dev libopenexr-dev libtbb-dev
 \end{lstlisting}
 
-In fact, OpenCV has many dependencies, and the lack of certain compilation items will affect some of its functions (but we will not use all the functions). OpenCV will check whether the dependencies will be installed during CMake and adjust its own functions. If you have a GPU on your computer and the relevant dependencies are installed, OpenCV will also enable GPU acceleration. But for this book, the above dependencies are sufficient.
+In fact, \textit{OpenCV} has many dependencies, and the lack of certain compilation items will affect some of its functions (but we will not use all the functions). \textit{OpenCV} will check whether the dependencies will be installed during CMake and adjust its own functions. If you have a GPU on your computer and the relevant dependencies are installed, \textit{OpenCV} will also enable GPU acceleration. But for this book, the above dependencies are sufficient.
 
-Subsequent compilation and installation are the same as ordinary CMake projects. After make, please call ``sudo make install'' to install OpenCV on your machine (instead of just compiling it). Depending on the machine configuration, this compilation process may take from 20 minutes to an hour. If your CPU is powerful, you can use commands like ``make -j4'' to call multiple threads to compile (the parameter after -j is the number of threads used). After installation, OpenCV is stored in the /usr/local directory by default. You can look for the installation location of OpenCV header files and library files to see where they are. In addition, if you have installed the OpenCV 2 series before, it is recommended that you install OpenCV 3 elsewhere (think about how this should be done).
+Subsequent compilation and installation are the same as ordinary CMake projects. After make, please call ``sudo make install'' to install \textit{OpenCV} on your machine (instead of just compiling it). Depending on the machine configuration, this compilation process may take from 20 minutes to an hour. If your CPU is powerful, you can use commands like ``make -j4'' to call multiple threads to compile (the parameter after -j is the number of threads used). After installation, \textit{OpenCV} is stored in the ``/usr/local'' directory by default. You can look for the installation location of \textit{OpenCV} header files and library files to see where they are. In addition, if you have installed the \textit{OpenCV} 2 series before, it is recommended that you install \textit{OpenCV} 3 elsewhere (think about how this should be done).
 
-\subsection{Basic OpenCV Images Operations}
-Now let's go through the basic image operations in OpenCV from a simple example.
+\subsection{Basic \textit{OpenCV} Images Operations}
+Now let's go through the basic image operations in \textit{OpenCV} from a simple example.
 
 \begin{lstlisting}[language=C++,caption=slambook/ch5/imageBasics/imageBasics.cpp]
 #include <iostream>
@@ -370,7 +370,7 @@ int main(int argc, char **argv) {
 }
 \end{lstlisting}
 
-In this example, we demonstrated the following operations: image reading, displaying, pixel vising, copying, assignment, etc. When compiling the program, you need to add the OpenCV header file in your ``CMakeLists.txt'', and then link the program to the OpenVC's library. At the same time, due to the use of C ++ 11 standards (such as nullptr and chrono), you also need to set up the c++ standard in compiler flag:
+In this example, we demonstrated the following operations: image reading, displaying, pixel vising, copying, assignment, etc. When compiling the program, you need to add the \textit{OpenCV} header file in your ``CMakeLists.txt'', and then link the program to the \textit{OpenCV}'s library. At the same time, due to the use of C ++ 11 standards (such as nullptr and chrono), you also need to set up the c++ standard in compiler flag:
 
 \begin{lstlisting}[language=Python,caption=slambook/ch5/imageBasics/CMakeLists.txt]
 # use c++11 standard
@@ -389,23 +389,23 @@ target_link_libraries( imageBasics ${OpenCV_LIBS} )
 
 Let's give some notes for the code:
 \begin{enumerate}
-\item The program reads the image position from argv[1], the first parameter on the command line. We prepared an image (ubuntu.png, an Ubuntu wallpaper, I hope you like it) for readers to test. Therefore, after compilation, use the following command to call this program:
+\item The program reads the image position from ``argv[1]'', the first parameter on the command line. We prepared an image (``ubuntu.png'', an Ubuntu wallpaper, I hope you like it) for readers to test. Therefore, after compilation, use the following command to call this program:
 \begin{lstlisting}[language=sh, caption=Terminal input:]
 ./build/imageBasics ubuntu.png
 \end{lstlisting}
 If you call this program in the IDE, be sure to give it parameters at the same time. This can be configured in the launch configuration dialog if you are using Clion.
 \item In line 10 \textasciitilde to 18, use the cv::imread function to read the image, and display the image and basic information.
-\item In line 35 \textasciitilde 46, we iterate over all pixels in the image and calculates the time spent in the entire loop. Please note that the pixel visiting method is not unique, and the method given by the example is not the most efficient way. OpenCV provides an iterator of cv::Mat, you can traverse the pixels of the image through the iterator. Or, cv::Mat::data provides a raw pointer to the beginning of the image data, you can directly calculate the offset through this pointer, and then get the actual memory location of the pixel. The method used in the example is to facilitate the reader to understand the structure of the image.
+\item In line 35 \textasciitilde 46, we iterate over all pixels in the image and calculates the time spent in the entire loop. Please note that the pixel visiting method is not unique, and the method given by the example is not the most efficient way. \textit{OpenCV} provides an iterator of cv::Mat, you can traverse the pixels of the image through the iterator. Or, cv::Mat::data provides a raw pointer to the beginning of the image data, you can directly calculate the offset through this pointer, and then get the actual memory location of the pixel. The method used in the example is to facilitate the reader to understand the structure of the image.
 
 On the author's machine (virtual machine), it takes about 12.74ms to traverse this image. You can compare the speed on your machine. However, we are using the default debug mode of CMake, which is much slower than the release mode.
 
-\item OpenCV provides many functions for manipulating images, we will not list them one by one, otherwise this book will become an OpenCV operation manual. The example shows the most common things like image reading and displaying, as well as the deep copy function in cv::Mat. During the programming process, readers will also encounter operations such as image rotation and interpolation. At this time, you should refer to the corresponding documentation of the function to understand their principles and usage.
+\item \textit{OpenCV} provides many functions for manipulating images, we will not list them one by one, otherwise this book will become an \textit{OpenCV} operation manual. The example shows the most common things like image reading and displaying, as well as the deep copy function in cv::Mat. During the programming process, readers will also encounter operations such as image rotation and interpolation. At this time, you should refer to the corresponding documentation of the function to understand their principles and usage.
 \end{enumerate}
 
-It should be noted that OpenCV is not the only image library, it is just one of the more widely used one. However, most image libraries have the similar image operations. We hope that readers can understand the representation of images in other libraries after understanding the representation of images in OpenCV, so that they can quickly adjust to any other libraries. In addition, since cv::Mat is also a matrix class, in addition to representing images, we can also use it to store matrix data such as rotation matrix. But it is generally believed that Eigen is more efficient for use with fixed-size matrices.
+It should be noted that \textit{OpenCV} is not the only image library, it is just one of the more widely used one. However, most image libraries have the similar image operations. We hope that readers can understand the representation of images in other libraries after understanding the representation of images in \textit{OpenCV}, so that they can quickly adjust to any other libraries. In addition, since cv::Mat is also a matrix class, in addition to representing images, we can also use it to store matrix data such as rotation matrix. But it is generally believed that \textit{Eigen} is more efficient for use with fixed-size matrices.
 
 \subsection{Image Undistortion}
-We've introduced the rad-tan distortion model in previous section, now let write an example to show the implementation. OpenCV has provided the cv::Undistort function for us, but we will also give a hand-written undistortion function to show the principles.
+We've introduced the rad-tan distortion model in previous section, now let write an example to show the implementation. \textit{OpenCV} has provided the cv::Undistort function for us, but we will also give a hand-written undistortion function to show the principles.
 
 \begin{lstlisting}[language=C++,caption=slambook/ch5/imageBasics/undistortImage.cpp]
 #include <opencv2/opencv.hpp>
@@ -511,15 +511,15 @@ int main(int argc, char **argv) {
     \label{fig:stereoExample}
 \end{figure}
 
-In this example, we call the SGBM (Semi-global Batch Matching) \textsuperscript{\cite{Hirschmuller2008}} algorithm implemented by OpenCV to calculate the disparity of the left and right images, and then transform it into the 3D space of the camera through the geometric model of the binocular camera. We use a classic parameter configuration from the internet, and we mainly adjust the maximum and minimum disparity. The disparity data combined with the camera's internal parameters and baseline can determine the position of each point in three-dimensional space. We omit the code related to displaying the point cloud to save some space.
+In this example, we call the SGBM (Semi-global Batch Matching) \textsuperscript{\cite{Hirschmuller2008}} algorithm implemented by \textit{OpenCV} to calculate the disparity of the left and right images, and then transform it into the 3D space of the camera through the geometric model of the binocular camera. We use a classic parameter configuration from the internet, and we mainly adjust the maximum and minimum disparity. The disparity data combined with the camera's internal parameters and baseline can determine the position of each point in three-dimensional space. We omit the code related to displaying the point cloud to save some space.
 
-This book is not going to introduce the disparity calculation algorithm of the binocular camera. Interested readers can read the relevant references \textsuperscript{\cite{Scharstein2002, Seitz2006}}. In addition to the binocular algorithm implemented by OpenCV, there are many other libraries focused on achieving efficient parallax calculations. It is still an active and complex subject today.
+This book is not going to introduce the disparity calculation algorithm of the binocular camera. Interested readers can read the relevant references \textsuperscript{\cite{Scharstein2002, Seitz2006}}. In addition to the binocular algorithm implemented by \textit{OpenCV}, there are many other libraries focused on achieving efficient parallax calculations. It is still an active and complex subject today.
 
 \subsection{RGB-D Vision}
 \label{sec:join-point-cloud}
 Finally, we demonstrate an example of RGB-D vision. The convenience of RGB-D cameras is that they can obtain pixel depth information through physical methods. If the internal and external parameters of the camera are known, we can calculate the position of any pixel in the world coordinate system, thereby creating a point cloud map. Now let's demonstrate how to do it.
 
-We have prepared 5 pairs of images, located in the slambook2/ch5/rgbd folder. There are 5 RGB images from 1.png to 5.png under the color/ directory, and 5 corresponding depth images under the depth/. At the same time, the ``pose.txt'' file gives the camera poses of the 5 images (in the form of $ \mathbf{T}_\mathrm{wc} $). The form of the pose record is the same as before, with the translation vector plus a rotation quaternion:
+We have prepared 5 pairs of images, located in the ``slambook2/ch5/rgbd'' folder. There are 5 RGB images from ``1.png'' to ``5.png'' under the color/ directory, and 5 corresponding depth images under the depth/. At the same time, the ``pose.txt'' file gives the camera poses of the 5 images (in the form of $ \mathbf{T}_\mathrm{wc} $). The form of the pose record is the same as before, with the translation vector plus a rotation quaternion:
 \[
 [x, y, z, q_x, q_y, q_z, q_w],
 \]
@@ -592,7 +592,7 @@ int main(int argc, char **argv) {
 }
 \end{lstlisting}
 
-We can see the point cloud in Pangolin after building it (see \autoref{fig:pointcloudmapping}). 
+We can see the point cloud in \textit{Pangolin} after building it (see \autoref{fig:pointcloudmapping}).
 
 \begin{figure}[!t]
     \centering
@@ -611,6 +611,6 @@ Through these examples, we demonstrated some common monocular, binocular, and de
 \item Investigate the similarities and differences between a global shutter camera and a rolling shutter camera. What are their advantages and disadvantages in SLAM?
 \item How are RGB-D cameras calibrated? Taking Kinect as an example, what parameters need to be calibrated? (Refer to \url{https://github.com/code-iai/iai_kinect2}.)
 \item In addition to the way of traversing the image demonstrated by the sample program, what other methods can you give to traverse the image?
-\item[\optional] Read the official OpenCV tutorial to learn its basic usage.
+\item[\optional] Read the official \textit{OpenCV} tutorial to learn its basic usage.
 \end{enumerate}
 

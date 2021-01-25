@@ -937,7 +937,7 @@ int main(int argc, char** argv) {
 \end{equation}
 这正是$\bm{T}_{WR}$的平移部分。因此，可以从$\bm{T}_{WR}$中直接看到\textbf{相机在何处}，这也是我们说$\bm{T}_{WR}$更为直观的原因。因此，在可视化程序里，轨迹文件存储了$\bm{T}_{WR}$而不是$\bm{T}_{RW}$。
 
-最后，我们需要一个支持3D绘图的程序库。有许多库都支持3D绘图，比如大家熟悉的matlab，python的matplotlib，OpenGL等。在linux中，一个常见的库是基于OpenGL的Pangolin库\footnote{\url{https://github.com/stevenlovegrove/Pangolin}}，它在支持OpenGL的绘图操作基础之上还提供了一些GUI的功能。在第二版的书籍中，我们使用git的submodule功能来管理本书依赖的第三方库。读者可以进入3rdparty文件夹中直接安装所需的库，git保证了我和你使用的版本是一致的。
+最后，我们需要一个支持3D绘图的程序库。有许多库都支持3D绘图，比如大家熟悉的MATLAB，python的matplotlib，OpenGL等。在Linux中，一个常见的库是基于OpenGL的Pangolin库\footnote{\url{https://github.com/stevenlovegrove/Pangolin}}，它在支持OpenGL的绘图操作基础之上还提供了一些GUI的功能。在第二版的书籍中，我们使用git的submodule功能来管理本书依赖的第三方库。读者可以进入3rdparty文件夹中直接安装所需的库，git保证了我和你使用的版本是一致的。
 
 \begin{lstlisting}[language=c++,caption=slambook2/ch3/examples/plotTrajectory.cpp]
 #include <pangolin/pangolin.h>

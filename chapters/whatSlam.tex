@@ -276,7 +276,7 @@ Our program is based on C++ programs on Linux. During the experiment, we will us
 
 Let's start by installing the experimental environment required for this book. As a book for beginners, we recommend Ubuntu as a development environment. Ubuntu and its variances have enjoyed a good reputation as a novice user in all major Linux distributions. Ubuntu is an open-source operating system. Its system and software can be downloaded freely on the official website (\url{http://ubuntu.com}), which provides detailed installation instructions. At the same time, Tsinghua University, China Science and Technology University, and other major universities in China have also provided Ubuntu software mirrors, making the software installation very convenient (probably there are also mirror websites in your country).
 
-The first version of this book uses Ubuntu 14.04 as the default development environment. In the second edition, we updated the default version to the newer \textbf{Ubuntu 18.04} (\autoref{fig:ubuntu1804}) for later research. If you want to change the styles, then Ubuntu Kylin, Debian, Deepin, and Linux Mint are also good choices. I promise that all the code in the book has been well tested under Ubuntu 18.04, but if you choose a different distribution, I am not sure if you will encounter some minor problems. You may need to spend some time solving small issues (but you can also take them as opportunities to exercise yourself). In general, Ubuntu's support for various libraries is relatively complete and rich. Although we don't limit which Linux distribution you use, in the explanation, \textbf{we will use Ubuntu 18.04 as an example} and mainly use Ubuntu commands (such as apt-get). So, in other versions of Ubuntu, there will be no obvious differences below. In general, the migration of programs between Linux is not very difficult. But if you want to use the programs in this book under Windows or OS X, you need to have some porting experience.
+The first version of this book uses Ubuntu 14.04 as the default development environment. In the second edition, we updated the default version to the newer \textbf{Ubuntu 18.04} (\autoref{fig:ubuntu1804}) for later research. If you want to change the styles, then Ubuntu Kylin, Debian, Deepin, and Linux Mint are also good choices. I promise that all the code in the book has been well tested under Ubuntu 18.04, but if you choose a different distribution, I am not sure if you will encounter some minor problems. You may need to spend some time solving small issues (but you can also take them as opportunities to exercise yourself). In general, Ubuntu's support for various libraries is relatively complete and rich. Although we don't limit which Linux distribution you use, in the explanation, \textbf{we will use Ubuntu 18.04 as an example} and mainly use Ubuntu commands (such as \textit{apt-get}). So, in other versions of Ubuntu, there will be no obvious differences below. In general, the migration of programs between Linux is not very difficult. But if you want to use the programs in this book under Windows or OS X, you need to have some porting experience.
 
 \begin{figure}[!ht]
     \centering
@@ -289,12 +289,12 @@ Now, I assume there's an Ubuntu 18.04 installed on your PC. Regarding the instal
 
 Now, let's say you have successfully installed Ubuntu, either a virtual machine or a dual system. If you are not familiar with Ubuntu, try its various software and experience its interface and interaction mode \footnote{Most people think Ubuntu is cool for the first time. }. But I have to remind you, especially to the novice friends: don't spend too much time on Ubuntu's user interface. Linux has a lot of chances to waste your time. You may find some niche software, some games, and even spend a lot of time looking for wallpapers. But remember, you are working with Linux. Especially in this book, you are using Linux to learn SLAM, so try to spend your time learning SLAM.
 
-Ok, let's choose a directory and put the code for the SLAM program in this book. For example, you can put the code under \textit{slambook2} in the home directory (/home/username). We will refer to this directory \textit{code root} in the future. At the same time, you can choose another directory to copy the git code of this book, which is convenient for comparison when doing experiments. The code for this book is divided into chapters. For example, this chapter's code will be under slambook2/ch2, and the next one will be under slambook2/ch3. So, now please go into the slambook2/ch2 directory (you should create a new folder and enter the folder name).
+Ok, let's choose a directory and put the code for the SLAM program in this book. For example, you can put the code under ``slambook2'' in the home directory (/home/username). We will refer to this directory \textit{code root} in the future. At the same time, you can choose another directory to copy the git code of this book, which is convenient for comparison when doing experiments. The code for this book is divided into chapters. For example, this chapter's code will be under ``slambook2/ch2'', and the next one will be under ``slambook2/ch3''. So, now please go into the ``slambook2/ch2'' directory (you should create a new folder and enter the folder name).
 
 \subsection{Hello SLAM}
 Like many computer books, let's write a \textit{HelloSLAM} program. But before we do this, let's talk about what a program is.
 
-In Linux, a program is a file with execute permissions. It can be a script or a binary file, but we don't limit its suffix name (unlike Windows, you need to specify it as a .exe file). The commonly used binaries such as \textit{cd} and \textit{ls} are executable files located in the \textit{/bin} directory. For an executable program elsewhere, as long as it has executable permissions, it will run when we enter the program name in the terminal. When programming in C++, we first write a text file:
+In Linux, a program is a file with execute permissions. It can be a script or a binary file, but we don't limit its suffix name (unlike Windows, you need to specify it as a .exe file). The commonly used binaries such as \textit{cd} and \textit{ls} are executable files located in the ``/bin'' directory. For an executable program elsewhere, as long as it has executable permissions, it will run when we enter the program name in the terminal. When programming in C++, we first write a text file:
 
 \begin{lstlisting}[language=C++,caption=slambook2/ch2/helloSLAM.cpp]
 #include <iostream>
@@ -318,7 +318,7 @@ sudo apt-get install g++
 \end{lstlisting}
 If there are other errors, please check again if the program you just entered is correct.
 
-This command compiles the text file ``helloSLAM.cpp'' into an executable program. We check the current directory and find that there is an additional a.out file. It has executed permissions (the color shall be different in default settings). We can enter ./a.out to run the program \footnote{Don't type the first \%. }:
+This command compiles the text file ``helloSLAM.cpp'' into an executable program. We check the current directory and find that there is an additional ``a.out'' file. It has executed permissions (the color shall be different in default settings). We can enter ``./a.out'' to run the program \footnote{Don't type the first \%. }:
 
 \begin{lstlisting}[language=sh,caption=Terminal input:]
 % ./a.out
@@ -327,12 +327,12 @@ Hello SLAM!
 
 As we thought, this program outputs ``Hello SLAM!'', telling us that it is running correctly.
 
-Please review what we did before. In this example, we used the editor to enter the source code for ``helloSLAM.cpp'', then called the \textit{g++} compiler to compile it and get the executable. By default, \textit{g++} compiles the source file into a program of the name \textit{a.out} (it is a bit weird but acceptable). If we like, we can also specify the file name of this output. This is an extremely simple example. We actually \textbf{use a lot of hidden default parameters, almost omitting all intermediate steps}, in order to give the reader a simple impression (although you may not have realized it). Below we will use CMake to compile this program.
+Please review what we did before. In this example, we used the editor to enter the source code for ``helloSLAM.cpp'', then called the \textit{g++} compiler to compile it and get the executable. By default, \textit{g++} compiles the source file into a program of the name ``a.out'' (it is a bit weird but acceptable). If we like, we can also specify the file name of this output. This is an extremely simple example. We actually \textbf{use a lot of hidden default parameters, almost omitting all intermediate steps}, in order to give the reader a simple impression (although you may not have realized it). Below we will use CMake to compile this program.
 
 \subsection{Use CMake}
-Theoretically, any C++ program can be compiled with g++. But when the program size is getting bigger and bigger, a project may have many folders and source files, and the compiled commands will be longer and longer. Usually, a small C++ project may contain more than a dozen classes, and there are complex dependencies between these classes. Some of them are compiled into executables, and some are compiled into libraries. If we only rely on the g++ command, we need to enter many commands, and the whole compilation process will become very long. Therefore, for C++ projects, using some engineering management tools is more efficient. In history, engineers used \textit{makefile} to compile automatically, but the CMake to be discussed below is more convenient than it. And CMake is widely used in engineering, we will see that most of the libraries mentioned later use CMake to manage the source code.
+Theoretically, any C++ program can be compiled with \textit{g++}. But when the program size is getting bigger and bigger, a project may have many folders and source files, and the compiled commands will be longer and longer. Usually, a small C++ project may contain more than a dozen classes, and there are complex dependencies between these classes. Some of them are compiled into executables, and some are compiled into libraries. If we only rely on the g++ command, we need to enter many commands, and the whole compilation process will become very long. Therefore, for C++ projects, using some engineering management tools is more efficient. In history, engineers used \textit{Makefile} to compile automatically, but the CMake to be discussed below is more convenient than it. And CMake is widely used in engineering, we will see that most of the libraries mentioned later use CMake to manage the source code.
 
-In a CMake project, we will use the \textit{cmake} command to generate a \textit{makefile}, and then use the make command to compile the entire project based on the makefile contents. The reader may not know what a makefile is, but it doesn't matter. We will learn by example. Still taking the above ``helloSLAM.cpp'' as an example, this time we are not using g++ directly, but using CMake to build a project and then compiling it. Create a new ``CMakeLists.txt'' file in ``slambook2/ch2/'' with the following contents:
+In a CMake project, we will use the \textit{cmake} command to generate a ``Makefile'', and then use the \textit{make} command to compile the entire project based on the ``Makefile'' contents. The reader may not know what a \textit{Makefile} is, but it doesn't matter. We will learn by example. Still taking the above ``helloSLAM.cpp'' as an example, this time we are not using g++ directly, but using CMake to build a project and then compiling it. Create a new ``CMakeLists.txt'' file in ``slambook2/ch2/'' with the following contents:
 \begin{lstlisting}[language=Python,caption=slambook2/ch2/CMakeLists.txt]
 cmake_minimum_required( VERSION 2.8 )
 project( HelloSLAM )
@@ -341,11 +341,11 @@ add_executable( helloSLAM helloSLAM.cpp )
 
 The ``CMakeLists.txt'' file is used to tell CMake what we want to do with the files in this directory. The contents of the ``CMakeLists.txt'' file need to follow the CMake syntax.  This example demonstrates the most basic project: specifying a project name and an executable program. According to the comments, the reader should understand what each sentence does.
 
-Now, in the current directory (slambook2/ch2/), call \textit{cmake} to compile the project: \footnote{Note that there's a dot at the end of the command, please don't forget it, which means using CMake in the current directory. }:
+Now, in the current directory (``slambook2/ch2/''), call \textit{cmake} to compile the project: \footnote{Note that there's a dot at the end of the command, please don't forget it, which means using CMake in the current directory. }:
 \begin{lstlisting}[language=sh,caption=Terminal input]
 cmake .
 \end{lstlisting}
-\textit{cmake} will output some compilation information, and then generate some intermediate files in the current directory, the most important of which is the makefile\footnote{The \textit{makefile} is an automated compilation script. Please just take it as an automatically generated compiler instructions without taking care of its content. }. Since \textit{makefile} is automatically generated, we don't have to modify it. Now, compile the project with the make command.
+\textit{cmake} will output some compilation information, and then generate some intermediate files in the current directory, the most important of which is the ``Makefile''\footnote{The \textit{Makefile} is an automated compilation script. Please just take it as an automatically generated compiler instructions without taking care of its content.}. Since \textit{Makefile} is automatically generated, we don't have to modify it. Now, compile the project with the ``make'' command.
 \begin{lstlisting}[language=sh,caption=Terminal input]
 % make
 Scanning dependencies of target helloSLAM
@@ -358,7 +358,7 @@ The compiler will show a process percent during compilation. We then get the dec
 % ./helloSLAM
 Hello SLAM!
 \end{lstlisting}
-to run it. Because we didn't modify the source code, we got the same result as before. Please think about the difference between this practice and the previous use of the g++ compiler. This time we used the \textit{cmake-make} process. The \textit{cmake} process handles the relationship between the project files, and the \textit{make} process actually calls g++ to compile the program. By calling this \textit{cmake-make} process, we have good management for the project: \textbf{from inputting a string of g++ commands to maintaining several relatively intuitive ``CMakeLists.txt'' files}, which will drastically reduce the difficulty of maintaining the entire project. For example, if you want to add another executable file, just add a line ``add\_executable'' in CMakeLists.txt, and the subsequent steps are unchanged. CMake will help us resolve code dependencies without having to type in a bunch of g++ commands.
+to run it. Because we didn't modify the source code, we got the same result as before. Please think about the difference between this practice and the previous use of the g++ compiler. This time we used the \textit{cmake-make} process. The \textit{cmake} process handles the relationship between the project files, and the \textit{make} process actually calls g++ to compile the program. By calling this \textit{cmake-make} process, we have good management for the project: \textbf{from inputting a string of g++ commands to maintaining several relatively intuitive ``CMakeLists.txt'' files}, which will drastically reduce the difficulty of maintaining the entire project. For example, if you want to add another executable file, just add a line ``add\_executable'' in ``CMakeLists.txt'', and the subsequent steps are unchanged. CMake will help us resolve code dependencies without having to type in a bunch of g++ commands.
 
 The only thing that is dissatisfied with this process is that the intermediate files generated by CMake are still in our code files. When we want to release the code, we don't want to publish these intermediate files together. At this time, we still need to delete them one by one, which is very inconvenient. A better approach is to have these intermediate files in an intermediate directory. After the compilation is successful, we will delete the intermediate directory. Therefore, the more common practice of compiling CMake projects is as follows:
 \begin{lstlisting}[language=sh,caption=Terminal input]
@@ -367,12 +367,12 @@ cd build
 cmake ..
 make
 \end{lstlisting}
-We created a new intermediate folder ``\textit{build}'', and then entered the build folder, use the ``\textit{cmake ..}'' command to compile the previous folder, which is the folder where the code is located. In this way, the intermediate files generated by CMake will be in the ``\textit{build}'' folder, separate from the source code. When publishing the source code, we just delete the \textit{build} folder. Please try to compile the code in ch2 in this way, and then call the generated executable (please remember to delete the intermediate file generated in the last section).
+We created a new intermediate folder ``build'', and then entered the build folder, use the ``\textit{cmake ..}'' command to compile the previous folder, which is the folder where the code is located. In this way, the intermediate files generated by CMake will be in the ``build'' folder, separate from the source code. When publishing the source code, we just delete the ``build'' folder. Please try to compile the code in ``ch2'' in this way, and then call the generated executable (please remember to delete the intermediate file generated in the last section).
 
 \subsection{Use Libraries}
 In a C++ project, not all code is compiled into executables. Only executable files with the main function will generate executable programs. For other codes, we just want to package them into a packet for other programs to call. This packet is called \textit{library}.
 
-A library is often just a collection of many algorithms and programs, and we will be exposed to other libraries in later exercises. For example, the OpenCV library provides many computer vision-related algorithms, while the Eigen library provides calculations of matrix algebra. Therefore, we need to learn how to use CMake to generate libraries and use the library's functions. Now let's demonstrate how to write a library yourself. Write the following ``libHelloSLAM.cpp'' file:
+A library is often just a collection of many algorithms and programs, and we will be exposed to other libraries in later exercises. For example, the \textit{OpenCV} library provides many computer vision-related algorithms, while the \textit{Eigen} library provides calculations of matrix algebra. Therefore, we need to learn how to use CMake to generate libraries and use the library's functions. Now let's demonstrate how to write a library yourself. Write the following ``libHelloSLAM.cpp'' file:
 
 \begin{lstlisting}[language=c++,caption=slambook2/ch2/libHelloSLAM.cpp]
 #include <iostream>
@@ -400,7 +400,7 @@ In Linux, library files are divided into static libraries and shared libraries. 
 \begin{lstlisting}[language=sh,caption=slambook2/ch2/CMakeLists.txt]
 add_library( hello_shared SHARED libHelloSLAM.cpp )
 \end{lstlisting}
-Then we will get a libhello\_shared.so.
+Then we will get a ``libhello\_shared.so''.
 
 The library file is a compressed package with compiled binary functions. However, if there is only a ``.a'' or ``.so'' library file, then we don't know what the function is and how to call it. In order for others (or ourselves) to use this library, we need to provide a \textit{header file} to indicate what is in the library. Therefore, for the library users, \textit{you can call this library as long as you get the header and library files}. Write the header file for ``libhello'' below.
 
@@ -466,7 +466,7 @@ There are many kinds of IDEs under Linux. Although there are still some gaps wit
 Below we take a little bit of space to introduce KDevelop and CLion.
 
 \subsubsection{Use KDE}
-Kdevelop natively supports the CMake project. To do this, after creating ``CMakeLists.txt'' in the terminal, open the ``CMakeLists.txt'' with ``Project $\rightarrow$Open/Import Project'' in KDevelop. The software will ask you a few questions, and by default, create a build folder to help you call the cmake and make commands. These can be done automatically by pressing the shortcut key F8. The following section of \autoref{fig:kdevelop} shows the compilation information.
+Kdevelop natively supports the CMake project. To do this, after creating ``CMakeLists.txt'' in the terminal, open the ``CMakeLists.txt'' with ``Project $\rightarrow$Open/Import Project'' in KDevelop. The software will ask you a few questions, and by default, create a build folder to help you call the \textit{cmake} and \textit{make} commands. These can be done automatically by pressing the shortcut key F8. The following section of \autoref{fig:kdevelop} shows the compilation information.
 
 We hand over the task of adapting to the IDE to the reader. If you are transferring from Windows, you will find its interface similar to Visual C++ or Visual Studio. Please use KDevelop to open the previous project and compile it to see what information it outputs. I believe you will feel more convenient than opening the terminal.
 
@@ -528,7 +528,7 @@ OK, if you are already familiar with the IDE's usage, then the second chapter wi
 \section*{Exercises}
 \begin{enumerate}
     \item[\optional] Read SLAM's review literature, such as~\cite{Cadena2016, Fuentes-Pacheco2015, Boal2014, Chen2012, Chen2007} and so on. What are the similarities and differences between these papers on SLAM and this book?
-    \item What are the parameters of the g++ command? If I want to change the generated program file name, how should I call g++?
+    \item What are the parameters of the \textit{g++} command? If I want to change the generated program file name, how should I call g++?
     \item Use the build folder to compile your CMake project, then try it in KDevelop.
     \item Deliberately add some syntax errors to the code to see what information the build will generate. Can you read the error message of g++?
     \item If you forgot to link the library to the executable, will the compiler report an error? What kind of mistakes are reported?
