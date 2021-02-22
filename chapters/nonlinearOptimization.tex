@@ -518,7 +518,7 @@ In order to tell Ceres the definition of the problem, we need to do the followin
 Next, let's actually operate Ceres to solve the curve fitting problem and understand the optimization process.
 
 \subsubsection{Install Ceres}
-In order to use Ceres, we first need to compile and install it. Ceres' GitHub address is \url{https://github.com/ceres-solver/ceres-solver}, and you can also directly use Ceres in our 3rdparty directory of the code repository so that you will use the same version as mine.
+In order to use Ceres, we first need to compile and install it. Ceres' GitHub address is \url{https://github.com/ceres-solver/ceres-solver}, and you can also directly use Ceres in our ``3rdparty'' directory of the code repository so that you will use the same version as mine.
 
 Like the libraries encountered before, Ceres is also a CMake project. Before compiling it, we need to install the dependencies first. You can install them with apt-get in Ubuntu, mainly some logging and testing tools used by Google itself:
 \begin{lstlisting}[language=sh,caption=terminal input: ]
@@ -657,7 +657,7 @@ Graph optimization is a way to express the optimization problem as \textbf{Graph
 The g2o is a \textbf{general} graph optimization library. ``General'' means that you can solve any least-squares problem that can be expressed as graph optimization, obviously including the curve fitting problem discussed above. Let us demonstrate how to do that.
 
 \subsubsection{Compilation and Installation of g2o}
-Just like the Ceres section, we should first compile and install the g2o library. Readers should have experienced this process many times, and they are basically the same. Regarding g2o, readers can download it from GitHub: \url{https://github.com/RainerKuemmerle/g2o}, or obtain it from the third-party code library provided in this book. Since g2o is still being updated, I suggest you use g2o under 3rdparty to ensure that the version is the same as mine.
+Just like the Ceres section, we should first compile and install the g2o library. Readers should have experienced this process many times, and they are basically the same. Regarding g2o, readers can download it from GitHub: \url{https://github.com/RainerKuemmerle/g2o}, or obtain it from the third-party code library provided in this book. Since g2o is still being updated, I suggest you use g2o under ``3rdparty'' to ensure that the version is the same as mine.
 
 g2o is also a cmake project. Let's install its dependencies first (some dependencies overlap with Ceres):
 \begin{lstlisting}[language=sh,caption=terminal input:]
