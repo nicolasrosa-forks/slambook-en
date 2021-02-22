@@ -125,11 +125,11 @@ Then, minimizing the Mahalanobis distance between the estimated value at all tim
 \end{equation}
 In this way, a \textbf{least square problem} is obtained with the same solution as the MLE problem. Intuitively speaking, due to the presence of noise, when we substitute the estimated trajectory and map into the SLAM motion and observation models, they will not be perfectly fit. What shall we do at this time? We perform \textbf{fine-tuning} on the estimated value of the state, so that the overall error is reduced. Of course, finally we will reach a (local) \textbf{minimum value}. This is a typical nonlinear optimization process.
 
-Observing the formula~\eqref{eq:least-square} carefully, we find that the least squares problem in SLAM has some specific structures:
+Observing the formula~\eqref{eq:least-square} carefully, we find that the least-squares problem in SLAM has some specific structures:
 
 \begin{itemize}
 	\item First, the objective function of the whole problem consists of many (weighted) error quadratic forms. Although the dimensionality of the overall state variable is very high, each error term is simple and is only related to one or two state variables. For example, the motion error is only related to $\mathbf{x}_{k-1}, \mathbf{x}_k$, and the observation error is only related to $\mathbf{x}_k, \mathbf{y}_j$. This relationship will give a \textbf{sparse} least square problem, which we will investigate further in the backend chapter.
-	\item Secondly, if you use Lie algebra to represent the increment, the problem is the least squares problem of \textbf{unconstrained}. However, if the rotation matrix/transformation matrix is ​​used to describe the pose, the constraint of the rotation matrix itself will be introduced, that is, $\mathrm{s.t.}\ \mathbf{R}^\mathrm{T} \mathbf{R} = \mathbf{I}$ and $\det (\mathbf{R})=1$ need to be added to the problem. Additional constraints can make optimization more difficult.
+	\item Secondly, if you use Lie algebra to represent the increment, the problem is a \textbf{unconstrained} least-squares problem. However, if the rotation matrix/transformation matrix is ​​used to describe the pose, the constraint of the rotation matrix itself will be introduced, that is, $\mathrm{s.t.}\ \mathbf{R}^\mathrm{T} \mathbf{R} = \mathbf{I}$ and $\det (\mathbf{R})=1$ need to be added to the problem. Additional constraints can make optimization more difficult.
 	\item Finally, we used a quadratic metric error, which is exactly the $\mathcal{L}_2-$norm. The information matrix is used as the weights of each elemnents. For example, if an observation is very accurate, the covariance matrix will be ``small'' and the information matrix will be ``large'', so this error term will have a higher weight than the others in the whole problem. We will see some drawbacks of the $\mathcal{L}_2$ error later.
 \end{itemize}
 
@@ -198,7 +198,7 @@ since the $(\mathbf{H}^\mathrm{T} \boldsymbol{\Sigma}^{-1} \mathbf{H})^{-1}$ is 
 
 \section{Nonlinear least squares}
 \label{sec:6.2}
-First consider a simple least squares problem:
+First consider a simple least-squares problem:
 \begin{equation}
     \mathop {\min }\limits_{\mathbf{x}} F(\mathbf{x}) = \frac{1}{2}{\left\| {f\left( \mathbf{x} \right) } \right\|^2_2}.
 \end{equation}
@@ -208,7 +208,7 @@ Among them, the status variable is $\mathbf{x} \in \mathbb{R}^n$, and $f$ is any
     \frac{ \mathrm{d} F}{ \mathrm{d} \mathbf{x}} = \mathbf{0}.
 \end{equation}
 
-We reach the minimum, maximum, or saddle points by solving this equation (or, intuitively, by letting the derivative be zero). But is this equation easy to solve? Well, it depends on the form of the derivative function of $f$. If $f$ is just a simple linear function, then the problem is only a simple linear least squares problem. Still, some derivative functions may be complicated in form, making the equation difficult to solve. Solving this equation requires us to know the \textbf{global property} of the objective function, which is usually not possible. For the least squares problem that is inconvenient to solve directly, we can use \textbf{iterated methods} to start from an initial value and continuously update the current estimations to reduce the objective function. The specific steps can be listed as follows:
+We reach the minimum, maximum, or saddle points by solving this equation (or, intuitively, by letting the derivative be zero). But is this equation easy to solve? Well, it depends on the form of the derivative function of $f$. If $f$ is just a simple linear function, then the problem is only a simple linear least-squares problem. Still, some derivative functions may be complicated in form, making the equation difficult to solve. Solving this equation requires us to know the \textbf{global property} of the objective function, which is usually not possible. For the least-squares problem that is inconvenient to solve directly, we can use \textbf{iterated methods} to start from an initial value and continuously update the current estimations to reduce the objective function. The specific steps can be listed as follows:
 
 \begin{mdframed}  
     \begin{enumerate}
@@ -250,7 +250,7 @@ The right side only contains the zero-order, first-order and quadratic terms of 
 
 We can also solve this linear equation and get the increment. This method is also called \textbf{Newton's method}.
 
-We have seen that both the first-order and second-order methods are very intuitive, as long as we can calculate Taylor expansion of $f$ and find the increments. We say, hey, the function looks like a linear or quadratic one. We can use the approximated function's minimum value to guess the minimum value of the original function. As long as the original objective function really looks like a first-order or quadratic function locally, this type of algorithm is always valid (this is also most cases in reality). However, these two methods also have their drawbacks. The steepest descent method is too greedy and easy to lead a zigzag way and increases the number of iterations. However, Newton's method needs to calculate the $\mathbf{H}$ matrix of the objective function, which is very time-expensive when the problem is large, and we usually tend to avoid the calculation of $\mathbf{H}$. For general problems, some quasi-Newton methods can get better results, and for least squares problems, there are several more practical methods: the \textbf{Gauss-Newton's method} and the (Levernburg-Marquardt's method).
+We have seen that both the first-order and second-order methods are very intuitive, as long as we can calculate Taylor expansion of $f$ and find the increments. We say, hey, the function looks like a linear or quadratic one. We can use the approximated function's minimum value to guess the minimum value of the original function. As long as the original objective function really looks like a first-order or quadratic function locally, this type of algorithm is always valid (this is also most cases in reality). However, these two methods also have their drawbacks. The steepest descent method is too greedy and easy to lead a zigzag way and increases the number of iterations. However, Newton's method needs to calculate the $\mathbf{H}$ matrix of the objective function, which is very time-expensive when the problem is large, and we usually tend to avoid the calculation of $\mathbf{H}$. For general problems, some quasi-Newton methods can get better results, and for least-squares problems, there are several more practical methods: the \textbf{Gauss-Newton's method} and the (Levernburg-Marquardt's method).
 
 \subsection{The Gauss-Newton Method}
 The Gauss-Newton method is one of the simplest methods in optimization algorithms. Its idea is to carry out a first-order Taylor expansion of $f(\mathbf{x})$. Please note that this is not the objective function $F(\mathbf{x})$ but the lower case $f(\mathbf{x})$, otherwise it is same as the Newton's method.
@@ -363,7 +363,7 @@ Fortunately, this matrix in visual SLAM often has a specific sparse form, which 
 
 \section{Practice: Curve Fitting}
 \subsection{Curve Fitting with Gauss-Newton}
-Next we use a simple example to illustrate how to solve the least squares problem. We will demonstrate how to write Gauss-Newton method by hand, and then introduce how to use the optimization library to solve this problem. For the same problem, these implementations will get the same result because their core algorithms are the same.
+Next we use a simple example to illustrate how to solve the least-squares problem. We will demonstrate how to write Gauss-Newton method by hand, and then introduce how to use the optimization library to solve this problem. For the same problem, these implementations will get the same result because their core algorithms are the same.
 
 Consider a curve that satisfies the following equation:
 \[
@@ -506,7 +506,7 @@ Google Ceres is a widely used optimization library for least-squares problems. I
     \end{array}
 \end{equation}
 
-In this question, $x_1, \cdots, x_n$ are optimized variables, also called \textbf{parameter blocks} (Parameter blocks), $f_i$ is called \textbf{cost function} (Cost function), also called residual Residual blocks can also be understood as error terms in SLAM. $l_j$ and $u_j$ are the upper and lower limits of the $j$th optimization variable. In the simplest case, take $l_j = -\infty, u_j=\infty$ (do not limit the boundary of the optimization variable). At this time, the objective function is composed of many square terms after a \textbf{kernel function}$\rho(\cdot)$ and then the sum of the \footnote{kernel function is discussed in Chapter 9. }. Similarly, you can take $\rho$ as the identity function. The objective function is the sum of the squares of many terms, and we get the unconstrained least squares problem, which is consistent with the previously introduced theory.
+In this question, $x_1, \cdots, x_n$ are optimized variables, also called \textbf{parameter blocks} (Parameter blocks), $f_i$ is called \textbf{cost function} (Cost function), also called residual Residual blocks can also be understood as error terms in SLAM. $l_j$ and $u_j$ are the upper and lower limits of the $j$th optimization variable. In the simplest case, take $l_j = -\infty, u_j=\infty$ (do not limit the boundary of the optimization variable). At this time, the objective function is composed of many square terms after a \textbf{kernel function}$\rho(\cdot)$ and then the sum of the \footnote{kernel function is discussed in Chapter 9. }. Similarly, you can take $\rho$ as the identity function. The objective function is the sum of the squares of many terms, and we get the unconstrained least-squares problem, which is consistent with the previously introduced theory.
 
 In order to tell Ceres the definition of the problem, we need to do the following things:
 \begin{enumerate}
@@ -643,7 +643,7 @@ The second practice part of this lecture is about another optimization library (
 \subsubsection{Introduction to Graph Optimization Theory}
 We have introduced the solution of nonlinear least squares. The least square problem in SLAM is normally composed of the sum of many small error terms. However, if we only treat them as variables and residuals, it would be hard to tell the \textbf{relationship} between them. For example, how many error terms are related to a certain optimization variable $x_j$? If we adjust some variables, does the overall cost function changes or keep the same? Furthermore, we hope to visually see the what optimization problem \textbf{looks like}. Therefore, the graph optimization is involved.
 
-Graph optimization is a way to express the optimization problem as \textbf{Graph}.  A graph consists of a number of \textbf{vertices} and \textbf{edges} connecting these vertices. A  \textbf{vertex} is used to represent an \textbf{optimization variable}, and a \textbf{edge} is used to represent an \textbf{error term}. Therefore, for any of the above-mentioned nonlinear least squares problem, we can construct a corresponding \textbf{graph}. We can simply call it \textbf{graph}, or use the definition in the probability graph, call it \textbf{Bayesian graph} or \textbf{factor graph}. Sometimes they are also called as \textbf{hyper graph} because an edge can be connect to more than two variables, e.g., where an error term is related to more than two variables. 
+Graph optimization is a way to express the optimization problem as \textbf{Graph}.  A graph consists of a number of \textbf{vertices} and \textbf{edges} connecting these vertices. A  \textbf{vertex} is used to represent an \textbf{optimization variable}, and a \textbf{edge} is used to represent an \textbf{error term}. Therefore, for any of the above-mentioned nonlinear least-squares problem, we can construct a corresponding \textbf{graph}. We can simply call it \textbf{graph}, or use the definition in the probability graph, call it \textbf{Bayesian graph} or \textbf{factor graph}. Sometimes they are also called as \textbf{hyper graph} because an edge can be connect to more than two variables, e.g., where an error term is related to more than two variables.
 
 \autoref{fig:graph-optimization}~ is a simple graph optimization example. We use triangles to represent the camera poses, and circles to represent landmark points, which constitute the vertices of the graph optimization; at the same time, the solid line represents the camera's motion model, and the dashed line represents the observation model, which form the edges of the graph optimization. At this point, although the mathematical form of the entire problem is still like \eqref{eq:least-square}, now we can intuitively see the \textbf{structure} of the problem. If you want, you can also make improvements like \textbf{remove isolated vertices} or \textbf{preferentially optimize vertices with more edges (or in graph theory terms, greater degrees)}. But the most basic graph optimization is just to use a graph model to express a nonlinear least-squares optimization problem. And we can use some properties of the graph model to do better optimization.
 
@@ -654,9 +654,9 @@ Graph optimization is a way to express the optimization problem as \textbf{Graph
     \label{fig:graph-optimization}
 \end{figure}
 
-The g2o is a \textbf{general} graph optimization library. "General" means that you can solve any least squares problem that can be expressed as graph optimization, obviously including the curve fitting problem discussed above. Let us demonstrate how to do that.
+The g2o is a \textbf{general} graph optimization library. ``General'' means that you can solve any least-squares problem that can be expressed as graph optimization, obviously including the curve fitting problem discussed above. Let us demonstrate how to do that.
 
-\subsubsection{Compilation and Installation of G2o}
+\subsubsection{Compilation and Installation of g2o}
 Just like the Ceres section, we should first compile and install the g2o library. Readers should have experienced this process many times, and they are basically the same. Regarding g2o, readers can download it from GitHub: \url{https://github.com/RainerKuemmerle/g2o}, or obtain it from the third-party code library provided in this book. Since g2o is still being updated, I suggest you use g2o under 3rdparty to ensure that the version is the same as mine.
 
 g2o is also a cmake project. Let's install its dependencies first (some dependencies overlap with Ceres):
@@ -807,7 +807,7 @@ In this program, we derive graph optimization vertices and edges for curve fitti
 
     \item Vertex reset function: setToOriginImpl. This is trivial, and we just set the estimate to zero.
 
-    \item The error calculation function: computeError. This function needs to take out the current estimated value of the vertex connected by the edge and compare it with its observed value according to the curve model. This is consistent with the error model in the least squares problem.
+    \item The error calculation function: computeError. This function needs to take out the current estimated value of the vertex connected by the edge and compare it with its observed value according to the curve model. This is consistent with the error model in the least-squares problem.
     
     \item The Jacobian calculation function: linearizeOplus. In this function, we calculate the Jacobian of each edge relative to the vertex.
 
@@ -834,7 +834,7 @@ estimated model: 0.890912   2.1719 0.943629
 We use the Gauss-Newton method for gradient descent, and after 9 iterations, the optimization result is obtained, which is almost the same as the Ceres and handwritten Gauss-Newton method. From the running speed perspective, our experimental conclusion is that handwriting is faster than g2o, and g2o is faster than Ceres. This is a generally intuitive experience that versatility and efficiency are often contradictory. However, in this experiment, Ceres uses automatic derivation, and the solver configuration is not completely consistent with Gauss-Newton, so it seems slower.
 
 \section{Summary}
-This section introduces a nonlinear optimization problem often encountered in SLAM: the least squares problem consisting of the sum of squares of many error terms. We introduced its definition and solution and discussed two main gradient descent methods: the Gauss-Newton method and the Levenberg-Marquardt method. In the practice part, two optimization libraries of the handwritten Gauss-Newton method, Ceres and g2o, were used to solve the same curve fitting problem and found that they gave similar results.
+This section introduces a nonlinear optimization problem often encountered in SLAM: the least-squares problem consisting of the sum of squares of many error terms. We introduced its definition and solution and discussed two main gradient descent methods: the Gauss-Newton method and the Levenberg-Marquardt method. In the practice part, two optimization libraries of the handwritten Gauss-Newton method, Ceres and g2o, were used to solve the same curve fitting problem and found that they gave similar results.
 
 Since Bundle Adjustment has not been discussed in detail, we have chosen a simple but representative example of curve fitting in the practice part to demonstrate the general nonlinear least squares solution method. In particular, if you use g2o to fit a curve, you must first convert the problem to graph optimization and define new vertices and edges. This approach is somewhat roundabout—the main purpose of g2o is not here. In contrast, the usage of Ceres is much more natural because it is designed to be a general optimization library. However, the more problem in SLAM is how to solve an optimization problem with many camera poses and many spatial points. In particular, when the camera pose is represented by Lie algebra, calculating the derivative of the camera pose in the error term will be worthy of detailed discussion. We will find in the follow-up content that g2o provides a large number of ready-to-use vertices and edges, which is very convenient for the camera pose estimation problem. In Ceres, we have to implement each Cost Function ourselves, which has some inconveniences.
 
