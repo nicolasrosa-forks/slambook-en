@@ -494,11 +494,11 @@ It is easy to see that the objective function of the whole problem approaches co
     \label{fig:ceres-fitting}
 \end{figure}
 
-\subsection{Curve Fitting with Google Ceres}
-In the next two sections we introduce two C++ optimization libraries: the Ceres library \textsuperscript{\cite{Ceres}} from Google and the g2o library \textsuperscript{\cite{Kummerle2011}} based on graph optimization. Since in g2o, we still need some knowledge about \textbf{graph} optimization, we first go through the Ceres here, then introduce some graph optimization theories, and finally talk about g2o. Since the optimization algorithms will still appear in the later "visual odometry" and "backend" chapters, please make sure you understand the meaning of the optimization algorithm and the content of the program.
+\subsection{Curve Fitting with \textit{Google Ceres}}
+In the next two sections we introduce two C++ optimization libraries: the \textit{Ceres} library \textsuperscript{\cite{Ceres}} from Google and the g2o library \textsuperscript{\cite{Kummerle2011}} based on graph optimization. Since in g2o, we still need some knowledge about \textbf{graph} optimization, we first go through the \textit{Ceres} here, then introduce some graph optimization theories, and finally talk about g2o. Since the optimization algorithms will still appear in the later "visual odometry" and "backend" chapters, please make sure you understand the meaning of the optimization algorithm and the content of the program.
 
-\subsubsection{Introduction to Ceres}
-Google Ceres is a widely used optimization library for least-squares problems. In Ceres, as users, we only need to define the optimization problem to be solved according to certain steps and then hand it over to the solver for calculation. The most general form of the least-squares problem solved by Ceres is as follows (kernel function least squares with boundary):
+\subsubsection{Introduction to \textit{Ceres}}
+\textit{Google Ceres} is a widely used optimization library for least-squares problems. In \textit{Ceres}, as users, we only need to define the optimization problem to be solved according to certain steps and then hand it over to the solver for calculation. The most general form of the least-squares problem solved by \textit{Ceres} is as follows (kernel function least squares with boundary):
 \begin{equation}
     \begin{array}{ll}
         \min \limits_x \quad & \frac{1}{2}\sum\limits_i {{\rho _i}\left( {{{\left\| {{f_i}\left( {{x_{{i_1}}}, \cdots {x_{{i_n}}}} \right)} \right\|}^2}} \right)} \\
@@ -508,27 +508,27 @@ Google Ceres is a widely used optimization library for least-squares problems. I
 
 In this question, $x_1, \cdots, x_n$ are optimized variables, also called \textbf{parameter blocks} (Parameter blocks), $f_i$ is called \textbf{cost function} (Cost function), also called residual Residual blocks can also be understood as error terms in SLAM. $l_j$ and $u_j$ are the upper and lower limits of the $j$th optimization variable. In the simplest case, take $l_j = -\infty, u_j=\infty$ (do not limit the boundary of the optimization variable). At this time, the objective function is composed of many square terms after a \textbf{kernel function}$\rho(\cdot)$ and then the sum of the \footnote{kernel function is discussed in Chapter 9. }. Similarly, you can take $\rho$ as the identity function. The objective function is the sum of the squares of many terms, and we get the unconstrained least-squares problem, which is consistent with the previously introduced theory.
 
-In order to tell Ceres the definition of the problem, we need to do the following things:
+In order to tell \textit{Ceres} the definition of the problem, we need to do the following things:
 \begin{enumerate}
     \item defines each parameter block. The parameter block is usually a trivial vector, but it can also be defined as a special structure such as quaternion and Lie algebra in SLAM. If it is a vector, we need to allocate a double array for each parameter block to store the variable's value.
-    \item Then, define the calculation method of the residual block. The residual block is usually associated with several parameter blocks, performs some custom calculations on them, and then returns the residual value. After Ceres sums the squares of them, it is used as the value of the objective function.
-    \item The residual block often also needs to define the Jacobian calculation method. In Ceres, you can use the "automatic derivative" function it provides, or you can manually specify the Jacobian calculation process. If you want to use automatic derivation, then the residual block needs to be written in a specific way: the residual calculation should be a bracketed operator with a template. We will illustrate this point through an example.
-    \item Finally, add all the parameter blocks and residual blocks to the Problem object defined by Ceres and call the Solve function to solve it. Before solving, we can pass some configuration information, such as the number of iterations, termination conditions, etc., or use the default configuration.
+    \item Then, define the calculation method of the residual block. The residual block is usually associated with several parameter blocks, performs some custom calculations on them, and then returns the residual value. After \textit{Ceres} sums the squares of them, it is used as the value of the objective function.
+    \item The residual block often also needs to define the Jacobian calculation method. In \textit{Ceres}, you can use the "automatic derivative" function it provides, or you can manually specify the Jacobian calculation process. If you want to use automatic derivation, then the residual block needs to be written in a specific way: the residual calculation should be a bracketed operator with a template. We will illustrate this point through an example.
+    \item Finally, add all the parameter blocks and residual blocks to the Problem object defined by \textit{Ceres} and call the Solve function to solve it. Before solving, we can pass some configuration information, such as the number of iterations, termination conditions, etc., or use the default configuration.
 \end{enumerate}
-Next, let's actually operate Ceres to solve the curve fitting problem and understand the optimization process.
+Next, let's actually operate \textit{Ceres} to solve the curve fitting problem and understand the optimization process.
 
-\subsubsection{Install Ceres}
-In order to use Ceres, we first need to compile and install it. Ceres' GitHub address is \url{https://github.com/ceres-solver/ceres-solver}, and you can also directly use Ceres in our ``3rdparty'' directory of the code repository so that you will use the same version as mine.
+\subsubsection{Install \textit{Ceres}}
+In order to use \textit{Ceres}, we first need to compile and install it. \textit{Ceres}' GitHub address is \url{https://github.com/ceres-solver/ceres-solver}, and you can also directly use \textit{Ceres} in our ``3rdparty'' directory of the code repository so that you will use the same version as mine.
 
-Like the libraries encountered before, Ceres is also a CMake project. Before compiling it, we need to install the dependencies first. You can install them with apt-get in Ubuntu, mainly some logging and testing tools used by Google itself:
+Like the libraries encountered before, \textit{Ceres} is also a CMake project. Before compiling it, we need to install the dependencies first. You can install them with apt-get in Ubuntu, mainly some logging and testing tools used by Google itself:
 \begin{lstlisting}[language=sh,caption=terminal input: ]
 sudo apt-get install liblapack-dev libsuitesparse-dev libcxsparse3 libgflags-dev libgoogle-glog-dev libgtest-dev 
 \end{lstlisting}
 
-Then, enter the Ceres library directory, use cmake to compile and install it. We have done this process many times, so I won't repeat it here. After the installation is complete, find the Ceres header file under /usr/local/include/ceres, and find the library file named libceres.a under /usr/local/lib/. With these files, we are able to include the Ceres headers and do the optimization calculations.
+Then, enter the \textit{Ceres} library directory, use cmake to compile and install it. We have done this process many times, so I won't repeat it here. After the installation is complete, find the \textit{Ceres} header file under /usr/local/include/ceres, and find the library file named libceres.a under /usr/local/lib/. With these files, we are able to include the \textit{Ceres} headers and do the optimization calculations.
 
-\subsubsection{Use Ceres for Curve Fitting}
-The following code demonstrates how to use Ceres to solve the same problem.
+\subsubsection{Use \textit{Ceres} for Curve Fitting}
+The following code demonstrates how to use \textit{Ceres} to solve the same problem.
 \begin{lstlisting}[language=c++,caption=slambook/ch6/ceresCurveFitting.cpp]
 #include <iostream>
 #include <opencv2/core/core.hpp>
@@ -608,13 +608,13 @@ int main(int argc, char **argv) {
 }
 \end{lstlisting}
 
-The code is quite self-explained because we write a lot of comments here. As you can see, we used OpenCV's noise generator to generate 100 data with Gaussian noise and then used Ceres for fitting. The Ceres usage demonstrated here has the following steps:
+The code is quite self-explained because we write a lot of comments here. As you can see, we used OpenCV's noise generator to generate 100 data with Gaussian noise and then used \textit{Ceres} for fitting. The \textit{Ceres} usage demonstrated here has the following steps:
 
 \begin{enumerate}
-    \item Defines the class of the residual block. The method is to write a class (or structure), and define the () operator with template parameters in the class so that the class becomes a \textbf{Functor} \footnote{A C++ term, such a class can be called as if it were a function because the operator () is overloaded. }. This way of definition allows Ceres to call the <double>() method for an instance of this class like a function. In fact, Ceres will pass the Jacobian matrix as a type parameter to this function to realize the function of automatic derivation (auto-diff, which is one of the best feature of Ceres).
-    \item The double array abc[3] in the program is the parameter block, and for the residual block, we construct a CURVE\_FITTING\_COST object for each data and then call AddResidualBlock to add the error term to the objective function. Since optimization requires gradients, we have several options: (1) Use Ceres's Auto Diff feature; (2) Use Numeric Diff (Numeric Diff) \footnote{Automatic derivation is also implemented with numerical derivatives, but since it is a template operation, it runs faster. }; (3) Derive the analytical derivative form by yourself and provide it to Ceres. Because automatic derivation is the most convenient in coding, we use automatic derivation here.
+    \item Defines the class of the residual block. The method is to write a class (or structure), and define the () operator with template parameters in the class so that the class becomes a \textbf{Functor} \footnote{A C++ term, such a class can be called as if it were a function because the operator () is overloaded. }. This way of definition allows \textit{Ceres} to call the <double>() method for an instance of this class like a function. In fact, \textit{Ceres} will pass the Jacobian matrix as a type parameter to this function to realize the function of automatic derivation (auto-diff, which is one of the best feature of \textit{Ceres}).
+    \item The double array abc[3] in the program is the parameter block, and for the residual block, we construct a CURVE\_FITTING\_COST object for each data and then call AddResidualBlock to add the error term to the objective function. Since optimization requires gradients, we have several options: (1) Use \textit{Ceres}'s Auto Diff feature; (2) Use Numeric Diff (Numeric Diff) \footnote{Automatic derivation is also implemented with numerical derivatives, but since it is a template operation, it runs faster. }; (3) Derive the analytical derivative form by yourself and provide it to \textit{Ceres}. Because automatic derivation is the most convenient in coding, we use automatic derivation here.
     \item Automatic derivation requires specifying the dimensions of the error term and optimization variable. The error here is a scalar with a dimension of 1; the optimized three quantities are $a, b, c$ with 3. Therefore, the variable dimensions are set to 1, 3 in the template parameter of the auto-derivation class AutoDiffCostFunction.
-    \item After setting the problem, call the Solve function to solve it. You can configure (very detailed) optimization options in Ceres. For example, you can choose to use Line Search or Trust Region, the number of iterations, step size, and so on. Readers can check the definition of Options to see what optimization methods are available. Of course, the default configuration can be used for a wide range of problems.
+    \item After setting the problem, call the Solve function to solve it. You can configure (very detailed) optimization options in \textit{Ceres}. For example, you can choose to use Line Search or Trust Region, the number of iterations, step size, and so on. Readers can check the definition of Options to see what optimization methods are available. Of course, the default configuration can be used for a wide range of problems.
 \end{enumerate}
 
 Finally let's see the experimental results by calling build/ceresCurveFitting: 
@@ -633,9 +633,9 @@ Finally let's see the experimental results by calling build/ceresCurveFitting:
     estimated a,b,c = 0.890908 2.1719 0.943628 
 \end{lstlisting}
 
-The final optimized value is basically the same as our experimental result in the previous section, but Ceres is relatively slow in running speed. Ceres used about 1.3 milliseconds on my machine, which is about six times slower than the handwritten Gauss-Newton method.
+The final optimized value is basically the same as our experimental result in the previous section, but \textit{Ceres} is relatively slow in running speed. \textit{Ceres} used about 1.3 milliseconds on my machine, which is about six times slower than the handwritten Gauss-Newton method.
 
-I hope readers have a general understanding of how to use Ceres through this simple example. Its advantage is that it provides an automatic derivation tool, making it unnecessary to calculate the cumbersome Jacobian matrix. Ceres's automatic derivation is realized through template elements, and the automatic derivation can be completed at compile-time, but it is still a numerical derivative. Most of the time in this book, I will still introduce the calculation of the Jacobian matrix because it is more helpful to understand the problem, and there are fewer problems in the optimization. In addition, Ceres' optimization process configuration is also very rich, making it suitable for a wide range of least squares optimization problems, including various problems other than SLAM.
+I hope readers have a general understanding of how to use \textit{Ceres} through this simple example. Its advantage is that it provides an automatic derivation tool, making it unnecessary to calculate the cumbersome Jacobian matrix. \textit{Ceres}'s automatic derivation is realized through template elements, and the automatic derivation can be completed at compile-time, but it is still a numerical derivative. Most of the time in this book, I will still introduce the calculation of the Jacobian matrix because it is more helpful to understand the problem, and there are fewer problems in the optimization. In addition, \textit{Ceres}' optimization process configuration is also very rich, making it suitable for a wide range of least squares optimization problems, including various problems other than SLAM.
 
 \subsection{Curve Fitting with g2o}
 The second practice part of this lecture is about another optimization library (widely used mainly in the SLAM field): g2o (General Graphic Optimization, G$^2$O). It is a library based on \textbf{graphic optimization}. Graph optimization is a theory that combines nonlinear optimization with graph theory, so before using it, let's spend a little space to introduce graph optimization theory.
@@ -657,14 +657,14 @@ Graph optimization is a way to express the optimization problem as \textbf{Graph
 The g2o is a \textbf{general} graph optimization library. ``General'' means that you can solve any least-squares problem that can be expressed as graph optimization, obviously including the curve fitting problem discussed above. Let us demonstrate how to do that.
 
 \subsubsection{Compilation and Installation of g2o}
-Just like the Ceres section, we should first compile and install the g2o library. Readers should have experienced this process many times, and they are basically the same. Regarding g2o, readers can download it from GitHub: \url{https://github.com/RainerKuemmerle/g2o}, or obtain it from the third-party code library provided in this book. Since g2o is still being updated, I suggest you use g2o under ``3rdparty'' to ensure that the version is the same as mine.
+Just like the \textit{Ceres} section, we should first compile and install the g2o library. Readers should have experienced this process many times, and they are basically the same. Regarding g2o, readers can download it from GitHub: \url{https://github.com/RainerKuemmerle/g2o}, or obtain it from the third-party code library provided in this book. Since g2o is still being updated, I suggest you use g2o under ``3rdparty'' to ensure that the version is the same as mine.
 
-g2o is also a cmake project. Let's install its dependencies first (some dependencies overlap with Ceres):
+g2o is also a cmake project. Let's install its dependencies first (some dependencies overlap with \textit{Ceres}):
 \begin{lstlisting}[language=sh,caption=terminal input:]
     sudo apt-get install qt5-qmake qt5-default libqglviewer-dev-qt5 libsuitesparse-dev libcxsparse3 libcholmod3
 \end{lstlisting}
 
-Then, compile and install g2o according to the cmake method. The description of the process is omitted here. After the installation is complete, the header files of g2o will be located under /usr/local/g2o, and the library files will be located under /usr/local/lib/. Now, we reconsider the curve fitting experiment in the Ceres routine, and do that experiment again in g2o.
+Then, compile and install g2o according to the cmake method. The description of the process is omitted here. After the installation is complete, the header files of g2o will be located under /usr/local/g2o, and the library files will be located under /usr/local/lib/. Now, we reconsider the curve fitting experiment in the \textit{Ceres} routine, and do that experiment again in g2o.
 
 \subsubsection{Curve Fitting with g2o}
 In order to use g2o, the curve fitting problem must first be constructed into graph optimization. In this process, just remember that \textbf{nodes are the optimization variables, and edges are the error terms}. The graph optimization problem of curve fitting can be drawn in the form of \autoref{fig:graph-fitting}~.
@@ -686,7 +686,7 @@ After clarifying the graph model, the next step is to build the model in g2o for
     \item Call g2o to optimize and get the result.
 \end{enumerate}
 
-This part is very similar to Ceres, of course there will be some differences in coding. Let's demonstrate the program.
+This part is very similar to \textit{Ceres}, of course there will be some differences in coding. Let's demonstrate the program.
 \begin{lstlisting}[language=c++,caption=slambook/ch6/g2oCurveFitting.cpp]
 #include <iostream>
 #include <g2o/core/g2o_core_api.h>
@@ -799,19 +799,19 @@ int main(int argc, char **argv) {
 }
 \end{lstlisting}
 
-In this program, we derive graph optimization vertices and edges for curve fitting from g2o: CurveFittingVertex and CurveFittingEdge, which essentially expands the use of g2o. These two classes are derived from BaseVertex and BaseUnaryEdge, respectively. In the derived classes, we have rewritten some important virtual functions:
+In this program, we derive graph optimization vertices and edges for curve fitting from g2o: \textit{CurveFittingVertex} and \textit{CurveFittingEdge}, which essentially expands the use of g2o. These two classes are derived from \textit{BaseVertex} and \textit{BaseUnaryEdge}, respectively. In the derived classes, we have rewritten some important virtual functions:
 \begin{enumerate}
-    \item Vertex update function: oplusImpl. We know that the most important thing in the optimization process is the calculation of incremental $\Delta \mathbf{x}$, and this function deals with $\mathbf{x}_{k+1} = \mathbf{x}_k + \Delta \mathbf{x}$ process.
+    \item The vertex update function: \textit{oplusImpl}. We know that the most important thing in the optimization process is the calculation of the incremental $\Delta \mathbf{x}$, and this function deals with $\mathbf{x}_{k+1} = \mathbf{x}_k + \Delta \mathbf{x}_k$ process.
 
-    Readers may think this is not something worth mentioning because it is just simple addition. Why doesn't g2o help us complete it? In the curve fitting process, since the optimization variables (curve parameters) are located in plain \textbf{vector space}, this update calculation is indeed nothing but just a simple addition. However, when the optimization variable is not in the vector space, for example, for $\mathbf{x}$ is the camera pose, it does not necessarily have an addition operation. At this time, it is necessary to redefine the behavior of \textbf{how the increment is added to the existing estimate}. According to the explanation in Lecture 4, we may use the left-multiplication update or the right-multiplication update instead of direct addition.
+    Readers may think this is not something worth mentioning because it is just simple addition. Why doesn't g2o help us complete it? In the curve fitting process, since the optimization variables (curve parameters) are located in plain \textbf{vector space}, this update calculation is indeed nothing but just a simple addition. However, when the optimization variable is not in the vector space, for example, for $\mathbf{x}$ is the camera pose, it does not necessarily have an addition operation. At this time, it is necessary to redefine the behavior of \textbf{how the increment is ``added'' to the existing estimate}. According to the explanation in Lecture 4, we may use the left-multiplication update or the right-multiplication update instead of direct addition.
 
-    \item Vertex reset function: setToOriginImpl. This is trivial, and we just set the estimate to zero.
+    \item The vertex reset function: \textit{setToOriginImpl}. This is trivial, and we just set the estimate to zero.
 
-    \item The error calculation function: computeError. This function needs to take out the current estimated value of the vertex connected by the edge and compare it with its observed value according to the curve model. This is consistent with the error model in the least-squares problem.
+    \item The error calculation function: \textit{computeError}. This function needs to take out the current estimated value of the vertex connected by the edge and compare it with its observed value according to the curve model. This is consistent with the error model in the least-squares problem.
     
-    \item The Jacobian calculation function: linearizeOplus. In this function, we calculate the Jacobian of each edge relative to the vertex.
+    \item The Jacobian calculation function: \textit{linearizeOplus}. In this function, we calculate the Jacobian of each edge relative to the vertex.
 
-    \item Save and read functions: read, write. Since we do not want to perform read/write operations, leave it blank.
+    \item Save and read functions: \textit{read}, \textit{write}. Since we do not want to perform read/write operations, leave it blank.
 \end{enumerate}
 
 After defining the vertices and edges, we declare a graph model in the main function, then add vertices and edges to the graph model according to the generated noise data, and finally call the optimization function for optimization. g2o will give the optimized result:
@@ -831,14 +831,14 @@ solve time cost = 0.000919301 seconds.
 estimated model: 0.890912   2.1719 0.943629
 \end{lstlisting}
 
-We use the Gauss-Newton method for gradient descent, and after 9 iterations, the optimization result is obtained, which is almost the same as the Ceres and handwritten Gauss-Newton method. From the running speed perspective, our experimental conclusion is that handwriting is faster than g2o, and g2o is faster than Ceres. This is a generally intuitive experience that versatility and efficiency are often contradictory. However, in this experiment, Ceres uses automatic derivation, and the solver configuration is not completely consistent with Gauss-Newton, so it seems slower.
+We use the Gauss-Newton method for gradient descent, and after 9 iterations, the optimization result is obtained, which is almost the same as the \textit{Ceres} and the handwritten Gauss-Newton method. From the running speed perspective, our experimental conclusion is that handwriting is faster than g2o, and g2o is faster than \textit{Ceres}. This is a generally intuitive experience that versatility and efficiency are often contradictory. However, in this experiment, Ceres uses automatic derivation, and the solver configuration is not completely consistent with Gauss-Newton, so it seems slower.
 
 \section{Summary}
 This section introduces a nonlinear optimization problem often encountered in SLAM: the least-squares problem consisting of the sum of squares of many error terms. We introduced its definition and solution and discussed two main gradient descent methods: the Gauss-Newton method and the Levenberg-Marquardt method. In the practice part, two optimization libraries of the handwritten Gauss-Newton method, Ceres and g2o, were used to solve the same curve fitting problem and found that they gave similar results.
 
-Since Bundle Adjustment has not been discussed in detail, we have chosen a simple but representative example of curve fitting in the practice part to demonstrate the general nonlinear least squares solution method. In particular, if you use g2o to fit a curve, you must first convert the problem to graph optimization and define new vertices and edges. This approach is somewhat roundabout—the main purpose of g2o is not here. In contrast, the usage of Ceres is much more natural because it is designed to be a general optimization library. However, the more problem in SLAM is how to solve an optimization problem with many camera poses and many spatial points. In particular, when the camera pose is represented by Lie algebra, calculating the derivative of the camera pose in the error term will be worthy of detailed discussion. We will find in the follow-up content that g2o provides a large number of ready-to-use vertices and edges, which is very convenient for the camera pose estimation problem. In Ceres, we have to implement each Cost Function ourselves, which has some inconveniences.
+Since Bundle Adjustment has not been discussed in detail, we have chosen a simple but representative example of curve fitting in the practice part to demonstrate the general nonlinear least-squares solution method. In particular, if you use g2o to fit a curve, you must first convert the problem to graph optimization and define new vertices and edges. This approach is somewhat roundabout—the main purpose of g2o is not here. In contrast, the usage of Ceres is much more natural because it is designed to be a general optimization library. However, the more problem in SLAM is how to solve an optimization problem with many camera poses and many spatial points. In particular, when the camera pose is represented by Lie algebra, calculating the derivative of the camera pose in the error term will be worthy of detailed discussion. We will find in the follow-up content that g2o provides a large number of ready-to-use vertices and edges, which is very convenient for the camera pose estimation problem. In Ceres, we have to implement each Cost Function ourselves, which has some inconveniences.
 
-In the two programs of the practical part, we did not calculate the derivative of the curve model with respect to the three parameters but used the numerical derivative of the optimization library, which made the theory and code simpler. The Ceres library provides automatic derivation based on template elements and numerical derivation at runtime, while g2o only provides numerical derivation method at runtime. However, for most problems, if you can derive the analytical form of the Jacobian matrix and tell the optimization library, you can avoid many problems in numerical derivation.
+In two programs of the practical part, we did not calculate the derivative of the curve model with respect to the three parameters but used the numerical derivative of the optimization library, which made the theory and code simpler. The Ceres library provides automatic derivation based on template elements and numerical derivation at runtime, while g2o only provides numerical derivation method at runtime. However, for most problems, if you can derive the analytical form of the Jacobian matrix and tell the optimization library, you can avoid many problems in numerical derivation.
 
 Finally, I hope readers can adapt to Ceres and g2o's extensive use of template programming. It may seem scary at first (especially the parenthesis operator for Ceres to set the residual block and the code for the g2o initialization part), but once you are familiar with it, you will feel that this method is natural and easy to extend. We will continue to discuss issues such as sparsity, kernel functions, and pose graphs in the SLAM backend lecture.
 

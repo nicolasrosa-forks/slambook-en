@@ -1289,7 +1289,7 @@ Sophus::SE3d &pose) {
 In this function, we implement a simple Gauss-Newton iteration optimization based on the previous theoretical derivation. Then we will compare the efficiency of OpenCV, handwritten implementation and g2o implementation.
 
 \subsection{BA optimization by g2o}
-After handwriting the optimization process, let's look at how to achieve the same functionality using the library g2o (in fact, it is completely similar with Ceres). The basic knowledge of g2o has been introduced in Lecture \ref{cpt:6}. Before using g2o, we have to model the problem as a graph optimization problem, as shown in \autoref{fig:ba-graph}~.
+After handwriting the optimization process, let's look at how to achieve the same functionality using the library g2o (in fact, it is completely similar with \textit{Ceres}). The basic knowledge of g2o has been introduced in Lecture \ref{cpt:6}. Before using g2o, we have to model the problem as a graph optimization problem, as shown in \autoref{fig:ba-graph}~.
 
 \begin{figure}[!htp]
 	\centering
@@ -1756,7 +1756,7 @@ What needs to be mentioned here is we have omitted a lot of discussion about som
 	\item In the ICP program, if the spatial point is also considered as an optimization variable, how should the program be written? How will the final result change?
 	\item[\optional] In the feature point matching, mismatches will inevitably be encountered. What happens if we put the wrong match into PnP or ICP? What methods can you think of to avoid mismatches?
 	\item[\optional] Use the SE3 class in Sophus to design the nodes and edges of g2o by yourself to implement the optimization of PnP and ICP.
-	\item[\optional] Implement the optimization of PnP and ICP in Ceres.
+	\item[\optional] Implement the optimization of PnP and ICP in \textit{Ceres}.
 \end{enumerate}
 
 %\section*{Depth Filter}
