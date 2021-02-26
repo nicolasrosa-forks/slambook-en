@@ -1,6 +1,7 @@
 % !Mode:: "TeX:UTF-8"
 \chapter{Visual Odometry: Part 2}
 \label{cpt:vo2}
+\label{cpt:8}
 \begin{mdframed}  
 	\textbf{Goal of Study}
 	\begin{enumerate}[labelindent=0em,leftmargin=1.5em]
@@ -142,7 +143,7 @@ In this way, the speed $u,v$ of pixels between images is obtained. When $t$ take
 \section{Practice: LK Optical Flow}
 \label{sec:LKFlow}
 %\subsection{Use TUM Dataset online}
-%The following demonstrates how to use the optical flow method provided by OpenCV to track feature points. As in the previous section, we have prepared several dataset images, which are stored in the data/ folder. They come from the public RGB-D dataset (TUM dataset) \footnote{see \url{http://vision.in.tum.de/data/datasets/rgbd-dataset/download} provided by the Technical University of Munich}. It contains many RGB-D videos, which can be used as experimental data for RGB-D or monocular SLAM. It also provides an accurate trajectory measured by the motion capture system, which can be used as a standard trajectory to calibrate the SLAM system. Because the data set is relatively large, we did not put it on GitHub, please go to the dataset homepage to retrieve the corresponding data. Part of the images in the "freburg1\_desk" data set are used in this program. Readers can find its download link on the TUM dataset homepage. Or, you can directly use the part of it provided on GitHub repo.
+%The following demonstrates how to use the optical flow method provided by \textit{OpenCV} to track feature points. As in the previous section, we have prepared several dataset images, which are stored in the data/ folder. They come from the public RGB-D dataset (TUM dataset) \footnote{see \url{http://vision.in.tum.de/data/datasets/rgbd-dataset/download} provided by the Technical University of Munich}. It contains many RGB-D videos, which can be used as experimental data for RGB-D or monocular SLAM. It also provides an accurate trajectory measured by the motion capture system, which can be used as a standard trajectory to calibrate the SLAM system. Because the data set is relatively large, we did not put it on GitHub, please go to the dataset homepage to retrieve the corresponding data. Part of the images in the "freburg1\_desk" data set are used in this program. Readers can find its download link on the TUM dataset homepage. Or, you can directly use the part of it provided on GitHub repo.
 %
 %Our data is located under data/ in the directory of this chapter as a compressed package (data.tar.gz). Since the TUM data set is collected from the actual environment, it is necessary to explain its data format (data sets generally have their own defined format). After unzipping, you will see the following files:
 %
@@ -164,7 +165,7 @@ In this way, the speed $u,v$ of pixels between images is obtained. When $t$ take
 %
 %This script will match according to the collection time in the two input files, and finally output to the file associate.txt. The output file contains the time and file name information of the two images after pairing, which can be used as the source for subsequent processing. In addition, the TUM data set also provides tools for comparing estimated trajectories with standard trajectories. We will introduce them when they are used.
 \subsection{Use LK optical flow}
-In the practice, we will use several sample images to track their feature points with OpenCV optical flow. At the same time, we will also manually implement a LK optical flow for a comprehensive understanding. We use two sample images from the Euroc dataset, extract the corner points in the first image, and then use optical flow to track their position in the second image. First, let's use the LK optical flow in OpenCV:
+In the practice, we will use several sample images to track their feature points with \textit{OpenCV} optical flow. At the same time, we will also manually implement a LK optical flow for a comprehensive understanding. We use two sample images from the Euroc dataset, extract the corner points in the first image, and then use optical flow to track their position in the second image. First, let's use the LK optical flow in OpenCV:
 
 \begin{lstlisting}[language=c++,caption=slambook2/ch8/optical_flow.cpp (snippet))]
 // use opencv's flow for validation
@@ -175,7 +176,7 @@ vector<float> error;
 cv::calcOpticalFlowPyrLK(img1, img2, pt1, pt2, status, error);
 \end{lstlisting}
 
-The optical flow in OpenCV is very simple to use. You only need to call the cv::calcOpticalFlowPyrLK function, provide two images and the corresponding feature points, you can get the tracked points, as well as the status and error of each point. We can determine whether the corresponding point is tracked correctly according to whether the status variable is 1. This function also has some optional parameters, but in the demonstration we only use the default parameters. We omit other codes that mention features and draw results here, which have been shown in the previous code snippet.
+The optical flow in \textit{OpenCV} is very simple to use. You only need to call the cv::calcOpticalFlowPyrLK function, provide two images and the corresponding feature points, you can get the tracked points, as well as the status and error of each point. We can determine whether the corresponding point is tracked correctly according to whether the status variable is 1. This function also has some optional parameters, but in the demonstration we only use the default parameters. We omit other codes that mention features and draw results here, which have been shown in the previous code snippet.
 
 \subsection{Implement optical flow with Gauss Newton method}
 \subsubsection{Single-layer optical flow}
@@ -419,7 +420,7 @@ In terms of runtime, the multi-layer optical flow method takes roughly the same 
 \subsection{Summary of optical flow practice}
 We see that LK optical flow can directly obtain the corresponding relationship of feature points. This correspondence is like the matching of descriptors, except that optical flow requires higher image continuity and light stability. We can use PnP, ICP, or epipolar geometry to estimate the camera motion through the feature points tracked by optical flow. These methods were introduced in the previous lecture and will not be discussed here.
 
-In terms of runtime, it extracts about 230 feature points in the experiment. OpenCV and multi-layer optical flow need about 2 milliseconds to complete the tracking (the CPU I use is Intel I7-8550U), which is quite fast. If we use keypoints like FAST, then the entire optical flow calculation can be done in about 5 milliseconds, which is very fast compared to feature matching. However, if the position of the corner point is not good, the optical flow is also easy to be lost or give wrong results, which requires the subsequent algorithm to have a certain outlier removal mechanism, we leave the relevant discussion to the later chapter.
+In terms of runtime, it extracts about 230 feature points in the experiment. \textit{OpenCV} and multi-layer optical flow need about 2 milliseconds to complete the tracking (the CPU I use is Intel I7-8550U), which is quite fast. If we use keypoints like FAST, then the entire optical flow calculation can be done in about 5 milliseconds, which is very fast compared to feature matching. However, if the position of the corner point is not good, the optical flow is also easy to be lost or give wrong results, which requires the subsequent algorithm to have a certain outlier removal mechanism, we leave the relevant discussion to the later chapter.
 
 In a nutshell, the optical flow method can accelerate the visual odometry calculation method based on feature points by avoiding the process of calculating and matching descriptors, but requires smoother camera movement (or higher collection frequency).
 

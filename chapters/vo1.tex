@@ -154,10 +154,10 @@ However, when the number of feature points is very large, the computational comp
 	\label{fig:exp1-images}
 \end{figure}
 
-OpenCV has integrated most mainstream image features, and we can easily use them by function calls. Let's complete two exercise: In the first one, we demonstrate the use of OpenCV for feature matching of ORB; in the second, we demonstrate how to write a simple ORB feature from scratch based on the principles introduced. Through the practice, readers will have a deeper and more clear understanding of the ORB calculation process. Then other features can be done analogously.
+OpenCV has integrated most mainstream image features, and we can easily use them by function calls. Let's complete two exercise: In the first one, we demonstrate the use of \textit{OpenCV} for feature matching of ORB; in the second, we demonstrate how to write a simple ORB feature from scratch based on the principles introduced. Through the practice, readers will have a deeper and more clear understanding of the ORB calculation process. Then other features can be done analogously.
 
 \subsection{ORB features in OpenCV}
-First we call OpenCV to extract and match ORB. I prepared two images for this practice, 1.png and 2.png under slambook2/ch7/, as shown in \autoref{fig:exp1-images}~. They are two images from the public data set \cite{Sturm2012}. We can see a slight movement of the camera. The procedure in this section demonstrates how to extract ORB features and perform matching. In the next section, we will demonstrate how to use matching results to estimate camera motion.
+First we call \textit{OpenCV} to extract and match ORB. I prepared two images for this practice, 1.png and 2.png under slambook2/ch7/, as shown in \autoref{fig:exp1-images}~. They are two images from the public data set \cite{Sturm2012}. We can see a slight movement of the camera. The procedure in this section demonstrates how to extract ORB features and perform matching. In the next section, we will demonstrate how to use matching results to estimate camera motion.
 
 The following program demonstrates how to use ORB:
 \begin{lstlisting}[language=c++,caption=slambook2/ch7/orb_cv.cpp]
@@ -744,7 +744,7 @@ epipolar constraint = [-0.0008009088410884102]
 ......
 \end{lstlisting}
 
-It can be seen from the output of the program that the accuracy of meeting the epipolar constraints is around the order of $10 ^{-3}$. According to the previous discussion, there are 4 possibilities for $\mathbf{R}, \mathbf{t}$ obtained by decomposition. In this program, OpenCV will use triangulation to detect whether the depth of the detected point is positive to select the correct solution.
+It can be seen from the output of the program that the accuracy of meeting the epipolar constraints is around the order of $10 ^{-3}$. According to the previous discussion, there are 4 possibilities for $\mathbf{R}, \mathbf{t}$ obtained by decomposition. In this program, \textit{OpenCV} will use triangulation to detect whether the depth of the detected point is positive to select the correct solution.
 
 \subsection*{Discussion}
 From demo program that the resulted $\mathbf{E}$ and $\mathbf{F}$ are different by a camera internal parameter matrix. Although it is not numerically intuitive, their mathematical relationship can be verified. Motion can be decomposed from $\mathbf{E}, \mathbf{F}$ and $\mathbf{H}$, but $\mathbf{H}$ needs to assume that the feature points are on the same plane. For the data of this experiment, this assumption is not true, so we mainly use $\mathbf{E}$ to find the motion.
@@ -775,6 +775,7 @@ For the eight-point method, the size of $\mathbf{A}$ is $8 \times 9$. If the giv
 So the $\mathbf{E}$ matrix in the sense of least squares is obtained. However, due to potential mismatches, we prefer to use \textbf{Random Sample Concensus (RANSAC)} instead of least squares to solve the above problem. RANSAC is general, applicable to many cases with incorrect data, and can handle data with incorrect matching.
 
 \section{Triangulation}
+\label{sec:7.5}
 In the previous two sections, we introduced using the epipolar constraint to estimate the camera motion and discussed its limitations. After estimating the motion, the next step is to use the camera motion to estimate the spatial positions of the feature points. In monocular SLAM, the depths of the pixels cannot be obtained by a single image. We need to estimate the depths of the map points by the method of \textbf{Triangulation}, shown in \autoref{fig: triangluar}.
 
 \begin{figure}[!ht]
@@ -1588,7 +1589,7 @@ It should be noted that the ICP we are talking about here refers to the problem 
 
 \section{Practice: Solving ICP}
 \subsection{Using SVD}
-Let's demonstrate how to use SVD and nonlinear optimization to solve ICP. In this section, we use two RGB-D images to obtain two sets of 3D points through feature matching, and finally use ICP to calculate their pose transformation. Since OpenCV does not currently have a method to calculate two sets of ICPs with matching points, and its principle is not complicated, we will implement an ICP by ourselves.
+Let's demonstrate how to use SVD and nonlinear optimization to solve ICP. In this section, we use two RGB-D images to obtain two sets of 3D points through feature matching, and finally use ICP to calculate their pose transformation. Since \textit{OpenCV} does not currently have a method to calculate two sets of ICPs with matching points, and its principle is not complicated, we will implement an ICP by ourselves.
 \begin{lstlisting}[language=c++,caption=slambook2/ch7/pose\_estimation\_3d3d.cpp（片段）]
 void pose_estimation_3d3d(
 const vector<Point3f> &pts1,
@@ -1749,7 +1750,7 @@ What needs to be mentioned here is we have omitted a lot of discussion about som
 \begin{enumerate}
 	\item In addition to the ORB feature points introduced in this book, what other feature points do you know? Please elaborate the principles of SIFT or SURF, and compare their advantages and disadvantages with ORB.
 	\item Design a program to call other types of feature points in OpenCV. Compare their time spent on your machine when extracting 1000 feature points.
-	\item[\optional] We found that the ORB feature points provided by OpenCV are not evenly distributed in the image. Can you find or propose a way to make the distribution of feature points more evenly?
+	\item[\optional] We found that the ORB feature points provided by \textit{OpenCV} are not evenly distributed in the image. Can you find or propose a way to make the distribution of feature points more evenly?
 	\item Investigate why FLANN can quickly handle matching problems. In addition to FLANN, what other ways to accelerate matching?
 	\item Substitute the EPnP used in the demo program with other PnP methods and investigate their working principles.
 	\item In PnP optimization, taking the observation of the first camera into consideration, how should the problem/program be formed? How will the final result change?
