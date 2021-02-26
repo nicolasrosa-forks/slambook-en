@@ -79,7 +79,7 @@ FAST is a kind of corner point, which mainly detects the obvious grayscale chang
 \item Iterate through the above four steps on each pixel.
 \end{enumerate}
 
-In the FAST-12 algorithm, to speed up, checking the brightness of the 1, 5, 9 and 13-th pixels on the circle for each pixel can quickly exclude a lot of pixels that are not corner points. Only when 3 of these 4 pixels are greater than $I_{p}+T$ or less than $I_{p}-T$, the current pixel may potentially be a corner point, otherwise it should be directly excluded. Such 'pre-processing' operation greatly accelerates FAST corner detection. In addition, the original FAST corners are often "clustered", meaning a lot of FAST corners present in the same area. Therefore, after the initial detection, non-maximal suppression is required. Only corner points with maximum response in a certain area will be retained to avoid the corners concentrating.
+In the FAST-12 algorithm, to speed up, checking the brightness of the 1, 5, 9 and 13-th pixels on the circle for each pixel can quickly exclude a lot of pixels that are not corner points. Only when 3 of these 4 pixels are greater than $I_{p}+T$ or less than $I_{p}-T$, the current pixel may potentially be a corner point, otherwise it should be directly excluded. Such ``pre-processing'' operation greatly accelerates FAST corner detection. In addition, the original FAST corners are often "clustered", meaning a lot of FAST corners present in the same area. Therefore, after the initial detection, non-maximal suppression is required. Only corner points with maximum response in a certain area will be retained to avoid the corners concentrating.
 
 \begin{figure}[!ht]
 	\centering
