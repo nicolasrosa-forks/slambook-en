@@ -88,7 +88,7 @@ In the FAST-12 algorithm, to speed up, checking the brightness of the 1, 5, 9 an
 	\label{fig:fastcorner}
 \end{figure}
 
-The calculation of FAST feature points only compares the brightness difference between pixels, thus the speed is very fast, but it suffers from bad repeatability and uneven distribution. Moreover, FAST corner points do not include direction information. At the same time, because it fixed the radius of circle as 3, there is also a scaling problem: a place that looks like a corner from a distance may not be a corner when it comes close. To solve those, ORB adds the description of scale and rotation. The scale invariance is achieved by the image pyramid \footnote{ pyramid refers to the downsampling of images at different levels to obtain images with different resolutions. }, and detect corner points on each layer of the pyramid. The rotation of features is realized by the Intensity Centroid method.
+The calculation of FAST feature points only compares the brightness difference between pixels, thus the speed is very fast, but it suffers from bad repeatability and uneven distribution. Moreover, FAST corner points do not include direction information. At the same time, because it fixed the radius of circle as 3, there is also a scaling problem: a place that looks like a corner from a distance may not be a corner when it comes close. To solve those, ORB adds the description of scale and rotation. The scale invariance is achieved by the image pyramid \footnote{ Pyramid refers to the downsampling of images at different levels to obtain images with different resolutions. }, and detect corner points on each layer of the pyramid. The rotation of features is realized by the Intensity Centroid method.
 
 Pyramid is a common approach in computer vision. For a schema, see \autoref{fig:pyramid}. The bottom of the pyramid is the original image. For each layer up, the image is scaled with a fixed ratio, so that we have images of different resolutions. The smaller image can be seen as a scene viewed from a distance. In the feature matching algorithm, we can match images on different layers to achieve scale invariance. For example, if the camera is moving backwards, then we should be able to find a match in the upper layer of the previous image pyramid and the lower layer of the next image.
 
@@ -106,7 +106,7 @@ In terms of rotation, we calculate the gray centroid of the image near the featu
 \[
 m_{pq}=\sum_{x,y \in B}x^{p}y^{q}I(x,y), \quad p, q = \{0,1\}.
 \]
-\item calculate the centroid of the image block by the moment:
+\item Calculate the centroid of the image block by the moment:
 \[
 C=\left(\frac{m_{10}}{m_{00}},\frac{m_{01}}{m_{00}}\right).
 \]
@@ -142,7 +142,7 @@ Feature matching (as shown in \autoref{fig:feature-matching}~) is a key step in 
     \label{fig:feature-matching}
 \end{figure}
 
-However, let’s look at the correct matching first, and then go back to discuss the mismatch problem. Consider images at two timestamps, if the feature points $x_{t}^{m}, m=1,2,...,M$ are extracted in the image $I_{t}$, then the feature points are also extracted in the image $I_{t+1}$ as $x_{t+1}^{n}, n=1,2,...,N$. How to find the correspondence between these two set elements? The simplest feature matching method is \textbf{Brute-Force Matcher}. That is, measure the distance between each feature point $x_{t}^{m}$ and all $x_{t+1}^{n}$ descriptors, and then sort, and take the closest one as the matching point. The descriptor distance indicates the \textbf{degree of similarity} between two features. In practice, different distance metric norms can be used. For descriptors of floating-point type, use Euclidean distance to measure. For binary descriptors (such as BRIEF), we often use Hamming distance as a metric - the Hamming distance between two binary strings refers to the number of \textbf{different digits}.
+However, let’s look at the correct matching first, and then go back to discuss the mismatch problem. Consider images at two timestamps, if the feature points $x_{t}^{m}, m=1,2,...,M$ are extracted in the image $I_{t}$, then the feature points are also extracted in the image $I_{t+1}$ as $x_{t+1}^{n}, n=1,2,...,N$. How to find the correspondence between these two set elements? The simplest feature matching method is \textbf{Brute-Force Matcher}. That is, measure the distance between each feature point $x_{t}^{m}$ and all $x_{t+1}^{n}$ descriptors, and then sort, and take the closest one as the matching point. The descriptor distance indicates the \textbf{degree of similarity} between two features. In practice, different distance metric norms can be used. For descriptors of floating-point type, use Euclidean distance to measure. For binary descriptors (such as BRIEF), we often use Hamming distance as a metric -- the Hamming distance between two binary strings refers to the number of \textbf{different digits}.
 
 However, when the number of feature points is very large, the computational complexity of the brute force matching method will become large, especially when you want to match a certain frame and a map. This does not meet our real-time requirements in SLAM. To solve this, the \textbf{Fast Approximate Nearest Neighbor (FLANN)} algorithm is more suitable. Since the theory of these matching algorithms is mature and the implementation has been already integrated into OpenCV, the technical details will not be described here. Interested readers can refer to the literature \cite{Muja2009}.
 
@@ -157,7 +157,7 @@ However, when the number of feature points is very large, the computational comp
 OpenCV has integrated most mainstream image features, and we can easily use them by function calls. Let's complete two exercise: In the first one, we demonstrate the use of \textit{OpenCV} for feature matching of ORB; in the second, we demonstrate how to write a simple ORB feature from scratch based on the principles introduced. Through the practice, readers will have a deeper and more clear understanding of the ORB calculation process. Then other features can be done analogously.
 
 \subsection{ORB features in OpenCV}
-First we call \textit{OpenCV} to extract and match ORB. I prepared two images for this practice, 1.png and 2.png under slambook2/ch7/, as shown in \autoref{fig:exp1-images}~. They are two images from the public data set \cite{Sturm2012}. We can see a slight movement of the camera. The procedure in this section demonstrates how to extract ORB features and perform matching. In the next section, we will demonstrate how to use matching results to estimate camera motion.
+First we call \textit{OpenCV} to extract and match ORB. I prepared two images for this practice, ``1.png'' and ``2.png'' under ``slambook2/ch7/'', as shown in \autoref{fig:exp1-images}~. They are two images from the public data set \cite{Sturm2012}. We can see a slight movement of the camera. The procedure in this section demonstrates how to extract ORB features and perform matching. In the next section, we will demonstrate how to use matching results to estimate camera motion.
 
 The following program demonstrates how to use ORB:
 \begin{lstlisting}[language=c++,caption=slambook2/ch7/orb_cv.cpp]
@@ -402,7 +402,7 @@ s_1 {\mathbf{p}_1} = \mathbf{KP},\quad s_2 \mathbf{p}_2 = \mathbf{K}\left( \math
 
 where $\mathbf{K}$ is the camera intrinsic parameters matrix, and $\mathbf{R}, \mathbf{t}$ are the camera motions between two camera frames. Specifically, they are $\mathbf{R}_{21}$ and $\mathbf{t}_{21}$, i.e. transformation from the first frame to the second. We can also write them in Lie algebra form.
 
-Sometimes, we use homogeneous coordinates to represent pixels. When using homogeneous coordinates, a vector will be equal to itself multiplied by any non-zero constant. This is usually used to express a projection relationship. For example, $s_1 \mathbf{p}_1$ and $\mathbf{p}_1$ form a projection relationship, and they are equal in the sense of homogeneous coordinates. We call this \textbf{equal up to a scale} (equal up to a scale), denoted as:
+Sometimes, we use homogeneous coordinates to represent pixels. When using homogeneous coordinates, a vector will be equal to itself multiplied by any non-zero constant. This is usually used to express a projection relationship. For example, $s_1 \mathbf{p}_1$ and $\mathbf{p}_1$ form a projection relationship, and they are equal in the sense of homogeneous coordinates. We call this \textbf{equal up to a scale}, denoted as:
 \begin{equation}
 s\mathbf{p} \simeq \mathbf{p}.
 \end{equation}
